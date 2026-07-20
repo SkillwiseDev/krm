@@ -15,11 +15,13 @@ export default function Home() {
       <Header />
       <Hero />
       <Products />
-      <FactoryVideo />
-      <Problems />
-      <WhyChoose />
-      <CustomerSuccess />
-      <Certifications />
+      <div className="product-support">
+        <FactoryVideo />
+        <Problems />
+        <WhyChoose />
+        <CustomerSuccess />
+        <Certifications />
+      </div>
       <Resources />
       <Footer />
     </main>

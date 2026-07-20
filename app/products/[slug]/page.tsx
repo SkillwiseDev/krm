@@ -77,15 +77,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
             efficiently while maintaining dependable diagnostic performance.
             <br />
             Suitable for small to medium diagnostic laboratories, the analyzer
-            combines ease of operation with reliable workflow support, making
-            it an ideal solution for routine blood testing requirements.
+            combines ease of operation with reliable workflow support, making it
+            an ideal solution for routine blood testing requirements.
           </p>
 
           <div className="product-description__icon" aria-hidden="true">
             <svg viewBox="0 0 100 100" role="presentation">
               <path d="M50 20C42 32 31 44 31 58a19 19 0 0 0 38 0c0-14-11-26-19-38Z" />
               <path d="M22 27c-8 1-15 6-18 13 8 2 16 0 21-6 2-3 4-7 5-10-3 1-6 2-8 3Zm56 0c8 1 15 6 18 13-8 2-16 0-21-6-2-3-4-7-5-10 3 1 6 2 8 3Z" />
-              <path className="product-description__cross" d="M46 46h8v8h8v8h-8v8h-8v-8h-8v-8h8Z" />
+              <path
+                className="product-description__cross"
+                d="M46 46h8v8h8v8h-8v8h-8v-8h-8v-8h8Z"
+              />
             </svg>
           </div>
         </div>
@@ -109,7 +112,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </ul>
       </section>
 
-      <section className="product-applications" aria-labelledby="applications-title">
+      <section
+        className="product-applications"
+        aria-labelledby="applications-title"
+      >
         <h2 id="applications-title">Applications</h2>
 
         <article className="application-card">

@@ -73,6 +73,14 @@ export default function WhyChoose() {
             {benefits[activeBenefit]}
           </p>
         </div>
+        <ul className="why-choose__benefits">
+          {benefits.map((benefit) => (
+            <li key={benefit}>
+              <ArrowMark />
+              <span>{benefit}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
