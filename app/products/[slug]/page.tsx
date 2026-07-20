@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import FAQOptions from "@/components/FAQOptions";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import applicationImage from "@/public/application.png";
 import analyzerImage from "@/public/image.png";
@@ -208,6 +209,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           Get a Quote
         </Link>
       </section>
+
+      <Footer />
     </main>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import FAQOptions from "@/components/FAQOptions";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import faqsImage from "@/public/faqs.png";
 import productImage from "@/public/image.png";
@@ -125,6 +126,8 @@ export default function ServicesPage() {
           Request Product Demo
         </Link>
       </section>
+
+      <Footer />
     </main>
   );
 }
