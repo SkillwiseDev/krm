@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import logo from "@/public/logo.png";
 import NavigationMenu from "@/components/NavigationMenu";
@@ -20,9 +21,9 @@ export default function Header() {
     <header
       className={`site-header${isScrolled ? " site-header--scrolled" : ""}`}
     >
-      <a className="brand" href="#home" aria-label="KRM Healthcare home">
+      <Link className="brand" href="/" aria-label="KRM Healthcare home">
         <Image src={logo} alt="KRM Healthcare" priority />
-      </a>
+      </Link>
       <NavigationMenu />
     </header>
   );

@@ -1,6 +1,8 @@
+import Link from "next/link";
+
 const navigationItems = [
-  { href: "#services", label: "Services" },
-  { href: "#contact", label: "Contact Us" },
+  { href: "/services", label: "Services" },
+  { href: "/contact", label: "Contact Us" },
 ];
 
 export default function NavigationMenu() {
@@ -13,9 +15,9 @@ export default function NavigationMenu() {
       </summary>
       <nav aria-label="Main navigation">
         {navigationItems.map((item) => (
-          <a key={item.href} href={item.href}>
+          <Link key={item.href} href={item.href}>
             {item.label}
-          </a>
+          </Link>
         ))}
       </nav>
     </details>
