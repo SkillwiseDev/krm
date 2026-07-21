@@ -4,6 +4,7 @@ import Link from "next/link";
 import FAQOptions from "@/components/FAQOptions";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { contactFormLink } from "@/lib/contact-links";
 import faqsImage from "@/public/faqs.png";
 import productImage from "@/public/image.png";
 import laboratoryServiceImage from "@/public/image6.png";
@@ -92,7 +93,14 @@ export default function ServicesPage() {
         />
 
         <h3>Turnkey Laboratory Solutions</h3>
-        <Link className="service-portfolio__link" href="/contact">
+        <Link
+          className="service-portfolio__link"
+          href={contactFormLink({
+            requirement: "Turnkey Laboratory Solutions",
+            sourcePage: "Services",
+            sourcePath: "/services",
+          })}
+        >
           Learn More <span aria-hidden="true">→</span>
         </Link>
       </section>
@@ -104,9 +112,33 @@ export default function ServicesPage() {
         <h2 id="technical-resources-title">Technical Resources</h2>
 
         <div className="technical-resources__links">
-          <Link href="/contact">Product Brochure</Link>
-          <Link href="/contact">Reagent Sheet</Link>
-          <Link href="/contact">Technical Specifications</Link>
+          <Link
+            href={contactFormLink({
+              requirement: "Product Brochure",
+              sourcePage: "Services",
+              sourcePath: "/services",
+            })}
+          >
+            Product Brochure
+          </Link>
+          <Link
+            href={contactFormLink({
+              requirement: "Reagent Sheet",
+              sourcePage: "Services",
+              sourcePath: "/services",
+            })}
+          >
+            Reagent Sheet
+          </Link>
+          <Link
+            href={contactFormLink({
+              requirement: "Technical Specifications",
+              sourcePage: "Services",
+              sourcePath: "/services",
+            })}
+          >
+            Technical Specifications
+          </Link>
         </div>
 
         <h3>FAQs</h3>
@@ -122,7 +154,15 @@ export default function ServicesPage() {
           <FAQOptions />
         </div>
 
-        <Link className="demo-request" href="/contact">
+        <Link
+          className="demo-request"
+          href={contactFormLink({
+            requirement: "Product Demo Request",
+            sourcePage: "Services",
+            sourcePath: "/services",
+            formName: "Demo Request",
+          })}
+        >
           Request Product Demo
         </Link>
       </section>

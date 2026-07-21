@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import FAQOptions from "@/components/FAQOptions";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { contactFormLink } from "@/lib/contact-links";
 import applicationImage from "@/public/application.png";
 import analyzerImage from "@/public/image.png";
 import faqsImage from "@/public/faqs.png";
@@ -43,6 +44,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   const product = products[slug as ProductSlug];
 
   if (!product) notFound();
+
+  const productPath = `/products/${slug}`;
 
   return (
     <main className="product-details-page">
@@ -171,7 +174,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
             "Reagent Information Sheet",
             "User Manual",
           ].map((download) => (
-            <Link href="/contact" key={download}>
+            <Link
+              href={contactFormLink({
+                requirement: download,
+                sourcePage: product.title,
+                sourcePath: productPath,
+                formName: "Download Request",
+              })}
+              key={download}
+            >
               <span className="download-icon" aria-hidden="true">
                 <svg viewBox="0 0 32 38" role="presentation">
                   <path d="M5 1h15l7 7v29H5zM20 1v8h7M10 19h12M10 24h12M10 29h8" />
@@ -205,7 +216,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
           />
         </div>
 
-        <Link className="product-quote" href="/contact">
+        <Link
+          className="product-quote"
+          href={contactFormLink({
+            requirement: "Product Quote",
+            sourcePage: product.title,
+            sourcePath: productPath,
+            formName: "Quote Request",
+          })}
+        >
           Get a Quote
         </Link>
       </section>

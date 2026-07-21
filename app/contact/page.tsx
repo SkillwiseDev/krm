@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { contactFormLink } from "@/lib/contact-links";
 import contactImage from "@/public/contactus.png";
 
 export const metadata: Metadata = {
@@ -11,7 +13,18 @@ export const metadata: Metadata = {
     "Get in touch with KRM Healthcare for laboratory equipment, reagents, turnkey lab solutions, and franchise opportunities.",
 };
 
-export default function ContactPage() {
+type ContactPageProps = {
+  searchParams: Promise<{
+    requirement?: string;
+    source?: string;
+    from?: string;
+    form?: string;
+  }>;
+};
+
+export default async function ContactPage({ searchParams }: ContactPageProps) {
+  const params = await searchParams;
+
   return (
     <main className="contact-page">
       <Header />
@@ -46,53 +59,68 @@ export default function ContactPage() {
           <article className="requirement-card">
             <h3>Product Enquiry</h3>
             <p>Looking for laboratory equipment or reagents?</p>
-            <Link href="#contact-form">Contact Sales</Link>
+            <Link
+              href={contactFormLink({
+                requirement: "Product Enquiry",
+                sourcePage: "Contact",
+                sourcePath: "/contact",
+              })}
+            >
+              Contact Sales
+            </Link>
           </article>
 
           <article className="requirement-card">
             <h3>Technical Support</h3>
             <p>Need assistance with your laboratory equipment?</p>
-            <Link href="#contact-form">Get Support</Link>
+            <Link
+              href={contactFormLink({
+                requirement: "Technical Support",
+                sourcePage: "Contact",
+                sourcePath: "/contact",
+              })}
+            >
+              Get Support
+            </Link>
           </article>
 
           <article className="requirement-card">
             <h3>Turnkey Laboratory Solutions</h3>
             <p>Planning to establish a new laboratory?</p>
-            <Link href="#contact-form">Speak to a Consultant</Link>
+            <Link
+              href={contactFormLink({
+                requirement: "Turnkey Laboratory Solutions",
+                sourcePage: "Contact",
+                sourcePath: "/contact",
+              })}
+            >
+              Speak to a Consultant
+            </Link>
           </article>
 
           <article className="requirement-card">
             <h3>Franchise Enquiry</h3>
             <p>Interested in opening a pathology laboratory?</p>
-            <Link href="#contact-form">Learn More</Link>
+            <Link
+              href={contactFormLink({
+                requirement: "Franchise Enquiry",
+                sourcePage: "Contact",
+                sourcePath: "/contact",
+              })}
+            >
+              Learn More
+            </Link>
           </article>
         </div>
       </section>
 
       <section className="contact-form-section" id="contact-form">
-        <form className="contact-enquiry-form">
-          <label>
-            <span className="sr-only">First name</span>
-            <input type="text" name="firstName" placeholder="First name" />
-          </label>
-          <label>
-            <span className="sr-only">Organization or Laboratory Name</span>
-            <input
-              type="text"
-              name="organization"
-              placeholder="Organization / Laboratory Name"
-            />
-          </label>
-          <label>
-            <span className="sr-only">Phone Number</span>
-            <input type="tel" name="phone" placeholder="Phone Number" />
-          </label>
-          <label>
-            <span className="sr-only">Email Address</span>
-            <input type="email" name="email" placeholder="Email Address" />
-          </label>
-          <button type="submit">Submit Enquiry</button>
-        </form>
+        <ContactForm
+          formName={params.form ?? "Contact Enquiry"}
+          sourcePage={params.source ?? "Contact"}
+          sourcePath={params.from ?? "/contact"}
+          requirementType={params.requirement}
+        />
 
         <div className="contact-methods">
           <div>
