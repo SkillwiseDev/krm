@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CategoryLandingView from "@/components/CategoryLandingView";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import SiteHeader from "@/components/SiteHeader";
 import {
   getServiceCategoryBySlug,
   getServicesByCategoryId,
@@ -48,7 +48,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!landing) {
     return (
       <main className="category-page">
-        <Header />
+        <SiteHeader />
         <article className="category-landing">
           <header className="category-landing__hero">
             <h1>{category?.name}</h1>
@@ -77,7 +77,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <main className="category-page">
-      <Header />
+      <SiteHeader />
       <CategoryLandingView
         categoryName={category?.name ?? landing.title}
         landing={landing}

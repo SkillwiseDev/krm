@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import BookingForm from "@/components/BookingForm";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import SiteHeader from "@/components/SiteHeader";
 import contactImage from "@/public/contactus.png";
 
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function BookPage() {
   return (
     <main className="contact-page book-page">
-      <Header />
+      <SiteHeader />
 
       <section className="contact-hero" aria-labelledby="book-hero-title">
         <Image

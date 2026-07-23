@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import SiteHeader from "@/components/SiteHeader";
 import { getPublishedBlogPosts } from "@/lib/blog-store";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +23,7 @@ export default async function BlogsPage() {
 
   return (
     <main className="blogs-page">
-      <Header />
+      <SiteHeader />
 
       <section className="blogs-hero" aria-labelledby="blogs-title">
         <h1 id="blogs-title">Blogs</h1>

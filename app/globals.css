@@ -2199,19 +2199,22 @@ a {
 
 .desktop-navigation {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: clamp(28px, 3vw, 48px);
+  gap: clamp(14px, 1.6vw, 28px);
   grid-column: 2;
   grid-row: 1;
   justify-self: center;
+  max-width: 100%;
 }
 
 .desktop-navigation a {
   position: relative;
   padding: 8px 0;
-  font-size: 17px;
+  font-size: clamp(13px, 1.15vw, 16px);
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .desktop-navigation a::after {
@@ -2357,8 +2360,9 @@ a {
   top: 50px;
   right: 0;
   display: grid;
-  min-width: 180px;
-  overflow: hidden;
+  min-width: 220px;
+  max-height: min(70vh, 420px);
+  overflow: auto;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 14px 35px rgba(0, 0, 0, 0.14);

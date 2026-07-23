@@ -5,16 +5,19 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import logo from "@/public/logo.png";
 
-const navigationItems = [
-  { href: "/about", label: "About Us" },
-  { href: "/services", label: "Services" },
-  { href: "/contact", label: "Contact Us" },
-];
+export type NavItem = {
+  href: string;
+  label: string;
+};
 
 const CUSTOMER_CARE_PHONE = "90390 90548";
 const CUSTOMER_CARE_PHONE_HREF = "tel:+919039090548";
 const CUSTOMER_CARE_EMAIL = "customercare@krmhealthcare.in";
 const CUSTOMER_CARE_EMAIL_HREF = "mailto:customercare@krmhealthcare.in";
+
+type HeaderProps = {
+  categoryItems?: NavItem[];
+};
 
 function PhoneIcon() {
   return (
@@ -50,8 +53,14 @@ function EmailIcon() {
   );
 }
 
-export default function Header() {
+export default function Header({ categoryItems = [] }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigationItems: NavItem[] = [
+    { href: "/about", label: "About Us" },
+    { href: "/services", label: "Services" },
+    ...categoryItems,
+    { href: "/contact", label: "Contact Us" },
+  ];
 
   useEffect(() => {
     const updateHeader = () => setIsScrolled(window.scrollY > 24);

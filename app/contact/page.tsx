@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ContactForm from "@/components/ContactForm";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import SiteHeader from "@/components/SiteHeader";
 import { contactFormLink } from "@/lib/contact-links";
 import contactImage from "@/public/contactus.png";
 
@@ -27,7 +27,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
 
   return (
     <main className="contact-page">
-      <Header />
+      <SiteHeader />
 
       <section className="contact-hero" aria-labelledby="contact-hero-title">
         <Image

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import SiteHeader from "@/components/SiteHeader";
 import {
   getBlogPostBySlug,
   getPublishedBlogPosts,
@@ -52,7 +52,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
   return (
     <main className="blog-detail-page">
-      <Header />
+      <SiteHeader />
 
       <article className="blog-detail">
         <Link className="blog-detail__back" href="/blogs">

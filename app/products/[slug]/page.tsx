@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import FAQOptions from "@/components/FAQOptions";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import SiteHeader from "@/components/SiteHeader";
 import ProductServiceDetail from "@/components/ProductServiceDetail";
 import { getServiceBySlug, getServices } from "@/lib/admin-store";
 import { contactFormLink } from "@/lib/contact-links";
@@ -63,7 +63,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (service) {
     return (
       <main className="product-details-page">
-        <Header />
+        <SiteHeader />
         <ProductServiceDetail service={service} />
         <Footer />
       </main>
@@ -78,7 +78,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   return (
     <main className="product-details-page">
-      <Header />
+      <SiteHeader />
 
       <section className="product-details-hero" aria-labelledby="product-title">
         <Image

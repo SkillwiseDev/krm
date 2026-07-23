@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FAQOptions from "@/components/FAQOptions";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import SiteHeader from "@/components/SiteHeader";
 import ProductPortfolio from "@/components/ProductPortfolio";
 import TechnicalResourcesSection from "@/components/TechnicalResourcesSection";
 import { getServices } from "@/lib/admin-store";
@@ -45,7 +45,7 @@ export default async function ServicesPage() {
 
   return (
     <main className="services-page">
-      <Header />
+      <SiteHeader />
 
       <section aria-labelledby="services-intro-title">
         <div className="services-page__media">

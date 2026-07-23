@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import SiteHeader from "@/components/SiteHeader";
 import { contactFormLink } from "@/lib/contact-links";
 import aboutUsImage from "@/public/aboutus.png";
 
@@ -38,7 +38,7 @@ const partnerRows = [
 export default function AboutPage() {
   return (
     <main className="about-page">
-      <Header />
+      <SiteHeader />
 
       <section className="about-hero" aria-labelledby="about-title">
         <h1 id="about-title">About Us</h1>
