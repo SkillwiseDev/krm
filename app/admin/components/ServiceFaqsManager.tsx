@@ -22,6 +22,7 @@ export default function ServiceFaqsManager({
   const [serviceId, setServiceId] = useState(services[0]?.id ?? "");
   const [imageUrl, setImageUrl] = useState(services[0]?.faqsImageUrl ?? "");
   const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -40,6 +41,7 @@ export default function ServiceFaqsManager({
     setImageUrl(next?.faqsImageUrl ?? "");
     setUploadError(null);
     setQuestion("");
+    setAnswer("");
   }
 
   async function handleImageChange(event: ChangeEvent<HTMLInputElement>) {
@@ -169,6 +171,17 @@ export default function ServiceFaqsManager({
                 required
               />
             </label>
+            <label>
+              Answer
+              <textarea
+                name="answer"
+                rows={4}
+                value={answer}
+                onChange={(event) => setAnswer(event.target.value)}
+                placeholder="Write the full answer shown when this FAQ is clicked."
+                required
+              />
+            </label>
             <button type="submit">Add FAQ</button>
           </form>
         ) : (
@@ -184,6 +197,7 @@ export default function ServiceFaqsManager({
                 <tr>
                   <th>#</th>
                   <th>Question</th>
+                  <th>Answer</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -192,6 +206,7 @@ export default function ServiceFaqsManager({
                   <tr key={faq.id}>
                     <td>{index + 1}</td>
                     <td>{faq.question}</td>
+                    <td>{faq.answer || "—"}</td>
                     <td>
                       <form action={removeFaq}>
                         <input

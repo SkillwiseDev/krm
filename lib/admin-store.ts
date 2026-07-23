@@ -73,6 +73,7 @@ export type ServiceDownload = {
 export type ServiceFaq = {
   id: string;
   question: string;
+  answer?: string;
 };
 
 export type Service = {
@@ -667,6 +668,7 @@ export async function setServiceFaqsImage(
 export async function addServiceFaq(
   serviceId: string,
   question: string,
+  answer = "",
 ): Promise<ServiceFaq | null> {
   const existing = await getServiceById(serviceId);
 
@@ -681,6 +683,7 @@ export async function addServiceFaq(
   const faq: ServiceFaq = {
     id: createId(),
     question: question.trim(),
+    answer: answer.trim() || undefined,
   };
 
   const service: Service = {

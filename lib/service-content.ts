@@ -102,6 +102,7 @@ function normalizeFaqs(faqs: ServiceFaq[] | undefined): ServiceFaq[] {
     .map((faq) => ({
       id: faq.id,
       question: faq.question.trim(),
+      answer: faq.answer?.trim() || undefined,
     }));
 }
 
@@ -141,6 +142,16 @@ export function parseSpecifications(value: FormDataEntryValue | null): ServiceSp
   }
 }
 
+function buildFeatureSections(
+  keyFeatures: string[],
+  benefitItems: string[],
+): ServiceFeatureSection[] {
+  return keyFeatures.map((title, index) => ({
+    title,
+    items: index === keyFeatures.length - 1 ? benefitItems : [],
+  }));
+}
+
 export const HEMOSCAN_SAMPLE: Omit<ServiceInput, "categoryId"> = {
   title: "HemoScan 3000 – Fully Automated 3-Part Hematology Analyzer",
   tagline: "Global Equipment Quality at Local Prices",
@@ -149,38 +160,35 @@ export const HEMOSCAN_SAMPLE: Omit<ServiceInput, "categoryId"> = {
     "The HemoScan 3000 is a compact, user-friendly, and highly efficient 3-part hematology analyzer designed to fulfill your everyday clinical needs. By combining classical electrical impedance measurement technology with advanced cyanide-free colorimetry, the system guarantees superior accuracy, complete biohazard safety, and maximum reliability.",
     "Engineered specifically to solve the high cost-per-test challenges faced by diagnostic environments, the HemoScan 3000 brings high-throughput automation within economic reach—delivering a perfect price-to-value fit for modern pathology labs.",
   ].join("\n\n"),
-  featureSections: [
-    {
-      title: "High Efficiency & Speed",
-      items: [
-        "60 Samples/Hour: Process up to 60 samples per hour, giving your laboratory a competitive edge with rapid one-minute waiting times per result.",
-        "One-Click Workflows: Minimize operational bottlenecks with simple one-click testing and smart one-click troubleshooting features.",
-      ],
-    },
-    {
-      title: "Uncompromised Reliability & Accuracy",
-      items: [
-        "Detailed Warning System: Built-in advanced software flags abnormal cell results, providing clear, actionable warnings to clinicians.",
-        "Comprehensive Quality Control: Safeguard integrity using dedicated, original barcoded reagents, alongside comprehensive QC programs and fully automatic calibration.",
-      ],
-    },
-    {
-      title: "Economical & Cost-Effective Operation",
-      items: [
-        "Ultra-Low Sample Volume: Requires just 9μL of whole blood per test. This minimal draw eliminates redraws and makes the analyzer ideal for pediatric testing.",
-        "Minimized Upkeep: The automated cleaning system reduces human intervention, ensuring the long-life hardware components stay operational without regular, manual maintenance expenses.",
-        "Lean Reagent Footprint: Operates on only two operational reagents and a probe cleaner, drastically lowering overhead logistics costs.",
-      ],
-    },
-    {
-      title: "Customized Software & Modern Connectivity",
-      items: [
-        "Massive Storage Capability: Securely holds up to 50,000 complete patient profiles—including both numerical data and clear visual graphical histograms.",
-        "Seamless LIS Integration: Equipped with a built-in LAN port supporting standard HL7 protocols, seamlessly syncing data directly to your Laboratory Information System (LIS).",
-      ],
-    },
-  ],
+  featureSections: buildFeatureSections(
+    [
+      "60 samples per hour automated throughput",
+      "10.4-inch intuitive color touch screen",
+      "29 measurement parameters provided",
+      "50,000-result memory data storage",
+      "20 microliter blood sample volume requirement",
+    ],
+    [
+      "60 Samples/Hour: Process up to 60 samples per hour, giving your laboratory a competitive edge with rapid one-minute waiting times per result.",
+      "One-Click Workflows: Minimize operational bottlenecks with simple one-click testing and smart one-click troubleshooting features.",
+      "Detailed Warning System: Built-in advanced software flags abnormal cell results, providing clear, actionable warnings to clinicians.",
+      "Comprehensive Quality Control: Safeguard integrity using dedicated, original barcoded reagents, alongside comprehensive QC programs and fully automatic calibration.",
+      "Ultra-Low Sample Volume: Requires just 9μL of whole blood per test. This minimal draw eliminates redraws and makes the analyzer ideal for pediatric testing.",
+      "Minimized Upkeep: The automated cleaning system reduces human intervention, ensuring the long-life hardware components stay operational without regular, manual maintenance expenses.",
+      "Lean Reagent Footprint: Operates on only two operational reagents and a probe cleaner, drastically lowering overhead logistics costs.",
+      "Massive Storage Capability: Securely holds up to 50,000 complete patient profiles—including both numerical data and clear visual graphical histograms.",
+      "Seamless LIS Integration: Equipped with a built-in LAN port supporting standard HL7 protocols, seamlessly syncing data directly to your Laboratory Information System (LIS).",
+    ],
+  ),
   specifications: [
+    {
+      label: "Analyzer Type",
+      detail: "3-Part Differential",
+    },
+    {
+      label: "System Operation",
+      detail: "Fully Automatic",
+    },
     {
       label: "Measurement Principles",
       detail:

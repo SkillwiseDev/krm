@@ -513,6 +513,7 @@ export async function addFaq(formData: FormData): Promise<void> {
 
   const serviceId = formData.get("serviceId");
   const question = formData.get("question");
+  const answer = formData.get("answer");
 
   if (
     typeof serviceId !== "string" ||
@@ -523,7 +524,11 @@ export async function addFaq(formData: FormData): Promise<void> {
     redirectWithToast("/admin/faqs", "FAQ question is required.", "error");
   }
 
-  const created = await addServiceFaq(serviceId, question);
+  const created = await addServiceFaq(
+    serviceId,
+    question,
+    typeof answer === "string" ? answer : "",
+  );
 
   if (!created) {
     redirectWithToast(

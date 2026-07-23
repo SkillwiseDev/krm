@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import FAQOptions from "@/components/FAQOptions";
 import ProductApplications from "@/components/ProductApplications";
+import ProductBenefits from "@/components/ProductBenefits";
+import ProductSpecifications from "@/components/ProductSpecifications";
 import type { Service } from "@/lib/admin-store";
 import { contactFormLink } from "@/lib/contact-links";
 import analyzerImage from "@/public/image.png";
@@ -26,13 +28,11 @@ export default function ProductServiceDetail({
     section.items.map((item) => item.trim()).filter(Boolean),
   );
   const keyFeatures =
-    featureTitles.length > 0
-      ? featureTitles
-      : benefitItems.slice(0, 3);
+    featureTitles.length > 0 ? featureTitles : benefitItems.slice(0, 3);
   const listedBenefits =
     featureTitles.length > 0
-      ? benefitItems
-      : benefitItems.slice(3);
+      ? benefitItems.slice(0, 5)
+      : benefitItems.slice(3, 8);
 
   return (
     <>
@@ -146,11 +146,7 @@ export default function ProductServiceDetail({
           {listedBenefits.length > 0 ? (
             <>
               <h2>Product Benefits</h2>
-              <ul className="product-benefits">
-                {listedBenefits.map((item, index) => (
-                  <li key={`benefit-${index}`}>{item}</li>
-                ))}
-              </ul>
+              <ProductBenefits benefits={listedBenefits} />
             </>
           ) : null}
         </section>
@@ -172,22 +168,7 @@ export default function ProductServiceDetail({
           {service.specifications.length > 0 ? (
             <>
               <h2 id="specifications-title">Product Specifications</h2>
-
-              <div className="specification-table">
-                <div className="specification-column">
-                  <h3>Specification</h3>
-                  {service.specifications.map((row) => (
-                    <div key={`label-${row.label}`}>{row.label}</div>
-                  ))}
-                </div>
-
-                <div className="specification-column specification-column--details">
-                  <h3>Details</h3>
-                  {service.specifications.map((row) => (
-                    <div key={`detail-${row.label}`}>{row.detail}</div>
-                  ))}
-                </div>
-              </div>
+              <ProductSpecifications specifications={service.specifications} />
             </>
           ) : null}
 
@@ -243,7 +224,10 @@ export default function ProductServiceDetail({
             )}
             <FAQOptions
               className="product-faqs__items"
-              options={service.faqs.map((faq) => faq.question)}
+              items={service.faqs.map((faq) => ({
+                question: faq.question,
+                answer: faq.answer,
+              }))}
             />
           </div>
 
