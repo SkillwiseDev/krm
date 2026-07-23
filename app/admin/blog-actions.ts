@@ -3,9 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
+import { redirectWithToast } from "@/lib/admin-toast";
 import {
   createBlogPost,
   deleteBlogPost,
+  getBlogPostById,
   updateBlogPost,
   type BlogInput,
   type BlogStatus,
@@ -47,21 +49,29 @@ export async function saveBlog(formData: FormData): Promise<void> {
   const input = parseBlogInput(formData);
 
   if (!input) {
-    redirect("/admin/blogs");
+    redirectWithToast("/admin/blogs", "Blog title is required.", "error");
   }
 
   const id = formData.get("id");
 
   if (typeof id === "string" && id) {
-    await updateBlogPost(id, input);
+    const blog = await updateBlogPost(id, input);
     revalidatePath("/admin/blogs");
     revalidatePath(`/admin/blogs/${id}`);
-    redirect(`/admin/blogs/${id}`);
+    revalidatePath("/blogs");
+    if (blog) {
+      revalidatePath(`/blogs/${blog.slug}`);
+    }
+    redirectWithToast(`/admin/blogs/${id}`, "Blog updated.");
   }
 
   const blog = await createBlogPost(input);
   revalidatePath("/admin/blogs");
-  redirect(`/admin/blogs/${blog.id}`);
+  revalidatePath("/blogs");
+  if (blog.status === "published") {
+    revalidatePath(`/blogs/${blog.slug}`);
+  }
+  redirectWithToast(`/admin/blogs/${blog.id}`, "Blog created.");
 }
 
 export async function removeBlog(formData: FormData): Promise<void> {
@@ -70,12 +80,17 @@ export async function removeBlog(formData: FormData): Promise<void> {
   const id = formData.get("id");
 
   if (typeof id !== "string" || !id) {
-    return;
+    redirectWithToast("/admin/blogs", "Blog could not be deleted.", "error");
   }
 
+  const existing = await getBlogPostById(id);
   await deleteBlogPost(id);
   revalidatePath("/admin/blogs");
-  redirect("/admin/blogs");
+  revalidatePath("/blogs");
+  if (existing) {
+    revalidatePath(`/blogs/${existing.slug}`);
+  }
+  redirectWithToast("/admin/blogs", "Blog deleted.");
 }
 
 export async function uploadBlogImage(

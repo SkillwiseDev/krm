@@ -7,11 +7,31 @@ import { logoutAdmin } from "@/app/admin/actions";
 const navItems = [
   {
     href: "/admin/service-categories",
-    label: "Service Category",
+    label: "Product Categories",
   },
   {
     href: "/admin/services",
     label: "Services",
+  },
+  {
+    href: "/admin/applications",
+    label: "Applications",
+  },
+  {
+    href: "/admin/downloads",
+    label: "Downloads",
+  },
+  {
+    href: "/admin/faqs",
+    label: "FAQs",
+  },
+  {
+    href: "/admin/resources",
+    label: "Resources & Downloads",
+  },
+  {
+    href: "/admin/certifications",
+    label: "Trust & Certifications",
   },
   {
     href: "/admin/form-submissions",

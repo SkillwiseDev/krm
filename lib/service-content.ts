@@ -1,8 +1,12 @@
 import type {
   Service,
+  ServiceApplication,
+  ServiceDownload,
+  ServiceFaq,
   ServiceFeatureSection,
   ServiceSpecification,
 } from "@/lib/admin-store";
+import { MAX_SERVICE_FAQS } from "@/lib/service-limits";
 
 export type ServiceInput = {
   id?: string;
@@ -39,6 +43,10 @@ export function normalizeService(
     overview: service.overview ?? "",
     featureSections: service.featureSections ?? [],
     specifications: service.specifications ?? [],
+    applications: normalizeApplications(service.applications),
+    downloads: normalizeDownloads(service.downloads),
+    faqsImageUrl: service.faqsImageUrl?.trim() || undefined,
+    faqs: normalizeFaqs(service.faqs),
     advantageTitle: service.advantageTitle ?? "",
     advantageContent: service.advantageContent ?? "",
     closingTitle: service.closingTitle ?? "",
@@ -46,6 +54,55 @@ export function normalizeService(
     createdAt: service.createdAt,
     updatedAt: service.updatedAt ?? service.createdAt,
   };
+}
+
+function normalizeApplications(
+  applications: ServiceApplication[] | undefined,
+): ServiceApplication[] {
+  if (!applications?.length) {
+    return [];
+  }
+
+  return applications
+    .filter((application) => application.id && application.title?.trim())
+    .map((application) => ({
+      id: application.id,
+      title: application.title.trim(),
+      iconUrl: application.iconUrl?.trim() || undefined,
+    }));
+}
+
+function normalizeDownloads(
+  downloads: ServiceDownload[] | undefined,
+): ServiceDownload[] {
+  if (!downloads?.length) {
+    return [];
+  }
+
+  return downloads
+    .filter(
+      (download) =>
+        download.id && download.title?.trim() && download.fileUrl?.trim(),
+    )
+    .map((download) => ({
+      id: download.id,
+      title: download.title.trim(),
+      fileUrl: download.fileUrl.trim(),
+    }));
+}
+
+function normalizeFaqs(faqs: ServiceFaq[] | undefined): ServiceFaq[] {
+  if (!faqs?.length) {
+    return [];
+  }
+
+  return faqs
+    .filter((faq) => faq.id && faq.question?.trim())
+    .slice(0, MAX_SERVICE_FAQS)
+    .map((faq) => ({
+      id: faq.id,
+      question: faq.question.trim(),
+    }));
 }
 
 export function parseFeatureSections(value: FormDataEntryValue | null): ServiceFeatureSection[] {

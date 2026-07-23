@@ -4,6 +4,7 @@ import crypto from "crypto";
 import {
   deleteBlogMongo,
   getBlogByIdMongo,
+  getBlogBySlugMongo,
   getBlogsMongo,
   insertBlogMongo,
   updateBlogMongo,
@@ -95,7 +96,12 @@ export function normalizeBlogPost(
 export async function getBlogPosts(): Promise<BlogPost[]> {
   if (isMongoConfigured()) {
     const blogs = await getBlogsMongo();
-    return blogs.map((blog) => normalizeBlogPost(blog));
+    return blogs
+      .map((blog) => normalizeBlogPost(blog))
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
   }
 
   const blogs = await readBlogsFromStore();
@@ -105,6 +111,22 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
+}
+
+export async function getPublishedBlogPosts(): Promise<BlogPost[]> {
+  const blogs = await getBlogPosts();
+  return blogs.filter((blog) => blog.status === "published");
+}
+
+export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+  if (isMongoConfigured()) {
+    const blog = await getBlogBySlugMongo(slug);
+    return blog ? normalizeBlogPost(blog) : null;
+  }
+
+  const blogs = await readBlogsFromStore();
+  const blog = blogs.find((item) => item.slug === slug);
+  return blog ? normalizeBlogPost(blog) : null;
 }
 
 export async function getBlogPostById(id: string): Promise<BlogPost | null> {

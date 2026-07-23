@@ -8,21 +8,36 @@ import Problems from "@/components/Problems";
 import Products from "@/components/Products";
 import Resources from "@/components/Resources";
 import WhyChoose from "@/components/WhyChoose";
+import { getServiceCategories } from "@/lib/admin-store";
+import { getSiteCertifications } from "@/lib/site-certifications-store";
+import { getSiteResources } from "@/lib/site-resources-store";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const [categories, siteResources, siteCertifications] = await Promise.all([
+    getServiceCategories(),
+    getSiteResources(),
+    getSiteCertifications(),
+  ]);
+  const products = categories.map((category) => ({
+    id: category.id,
+    name: category.name,
+  }));
+
   return (
     <main>
       <Header />
       <Hero />
-      <Products />
+      <Products products={products} />
       <div className="product-support">
         <FactoryVideo />
         <Problems />
         <WhyChoose />
         <CustomerSuccess />
-        <Certifications />
+        <Certifications data={siteCertifications} />
       </div>
-      <Resources />
+      <Resources data={siteResources} />
       <Footer />
     </main>
   );

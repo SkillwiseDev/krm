@@ -30,7 +30,9 @@ export async function insertServiceCategoryMongo(
   }
 
   const db = await getMongoDb();
-  await db.collection<ServiceCategoryDocument>(CATEGORIES_COLLECTION).insertOne(category);
+  await db
+    .collection<ServiceCategoryDocument>(CATEGORIES_COLLECTION)
+    .insertOne(category);
 }
 
 export async function deleteServiceCategoryMongo(id: string): Promise<void> {
@@ -39,7 +41,9 @@ export async function deleteServiceCategoryMongo(id: string): Promise<void> {
   }
 
   const db = await getMongoDb();
-  await db.collection<ServiceCategoryDocument>(CATEGORIES_COLLECTION).deleteOne({ id });
+  await db
+    .collection<ServiceCategoryDocument>(CATEGORIES_COLLECTION)
+    .deleteOne({ id });
 }
 
 export async function getServicesMongo(): Promise<Service[]> {
@@ -141,6 +145,26 @@ export async function getServiceByIdMongo(id: string): Promise<Service | null> {
   const document = await db
     .collection<ServiceDocument>(SERVICES_COLLECTION)
     .findOne({ id });
+
+  if (!document) {
+    return null;
+  }
+
+  const { _id, ...service } = document;
+  return service;
+}
+
+export async function getServiceBySlugMongo(
+  slug: string,
+): Promise<Service | null> {
+  if (!isMongoConfigured()) {
+    return null;
+  }
+
+  const db = await getMongoDb();
+  const document = await db
+    .collection<ServiceDocument>(SERVICES_COLLECTION)
+    .findOne({ slug });
 
   if (!document) {
     return null;

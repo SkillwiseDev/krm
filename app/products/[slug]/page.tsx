@@ -5,12 +5,16 @@ import { notFound } from "next/navigation";
 import FAQOptions from "@/components/FAQOptions";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import ProductServiceDetail from "@/components/ProductServiceDetail";
+import { getServiceBySlug, getServices } from "@/lib/admin-store";
 import { contactFormLink } from "@/lib/contact-links";
 import applicationImage from "@/public/application.png";
 import analyzerImage from "@/public/image.png";
 import faqsImage from "@/public/faqs.png";
 
-const products = {
+export const dynamic = "force-dynamic";
+
+const legacyProducts = {
   "3-part-hematology-analyzer": {
     title: "3-Part Hematology Analyzer",
     summary:
@@ -18,18 +22,31 @@ const products = {
   },
 };
 
-type ProductSlug = keyof typeof products;
+type LegacyProductSlug = keyof typeof legacyProducts;
 type ProductPageProps = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return Object.keys(products).map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  const services = await getServices();
+  return [
+    ...services.map((service) => ({ slug: service.slug })),
+    ...Object.keys(legacyProducts).map((slug) => ({ slug })),
+  ];
 }
 
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = products[slug as ProductSlug];
+  const service = await getServiceBySlug(slug);
+
+  if (service) {
+    return {
+      title: `${service.title} | KRM Healthcare`,
+      description: service.summary || service.tagline,
+    };
+  }
+
+  const product = legacyProducts[slug as LegacyProductSlug];
 
   return product
     ? {
@@ -41,7 +58,19 @@ export async function generateMetadata({
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = products[slug as ProductSlug];
+  const service = await getServiceBySlug(slug);
+
+  if (service) {
+    return (
+      <main className="product-details-page">
+        <Header />
+        <ProductServiceDetail service={service} />
+        <Footer />
+      </main>
+    );
+  }
+
+  const product = legacyProducts[slug as LegacyProductSlug];
 
   if (!product) notFound();
 

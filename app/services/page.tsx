@@ -4,11 +4,14 @@ import Link from "next/link";
 import FAQOptions from "@/components/FAQOptions";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import ProductPortfolio from "@/components/ProductPortfolio";
+import { getServices } from "@/lib/admin-store";
 import { contactFormLink } from "@/lib/contact-links";
 import faqsImage from "@/public/faqs.png";
-import productImage from "@/public/image.png";
 import laboratoryServiceImage from "@/public/image6.png";
 import serviceImage from "@/public/service.png";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Services | KRM Healthcare",
@@ -16,7 +19,25 @@ export const metadata: Metadata = {
     "Explore KRM Healthcare's complete portfolio of diagnostic laboratory solutions.",
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await getServices();
+  const portfolioItems =
+    services.length > 0
+      ? services.map((service) => ({
+          id: service.id,
+          title: service.title,
+          href: `/products/${service.slug}`,
+          imageUrl: service.heroImageUrl,
+        }))
+      : [
+          {
+            id: "legacy",
+            title: "3-Part Hematology Analyzer",
+            href: "/products/3-part-hematology-analyzer",
+            imageUrl: undefined as string | undefined,
+          },
+        ];
+
   return (
     <main className="services-page">
       <Header />
@@ -46,38 +67,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section
-        className="product-portfolio"
-        aria-labelledby="product-portfolio-title"
-      >
-        <h2 id="product-portfolio-title">Product Portfolio</h2>
-
-        <div className="product-portfolio__image-wrap">
-          <Image
-            className="product-portfolio__image"
-            src={productImage}
-            alt="AC310 3-part hematology analyzer"
-            sizes="(max-width: 600px) 52vw, 280px"
-          />
-        </div>
-
-        <article className="portfolio-card">
-          <h3>3-Part Hematology Analyzer</h3>
-          <Link
-            className="portfolio-card__link"
-            href="/products/3-part-hematology-analyzer"
-          >
-            Learn More <span aria-hidden="true">→</span>
-          </Link>
-        </article>
-
-        <div className="portfolio-dots" aria-label="Product 2 of 4">
-          <span />
-          <span className="portfolio-dots__active" />
-          <span />
-          <span />
-        </div>
-      </section>
+      <ProductPortfolio items={portfolioItems} />
 
       <section
         className="service-portfolio"

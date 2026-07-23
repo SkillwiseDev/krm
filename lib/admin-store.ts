@@ -17,6 +17,7 @@ import {
   getServiceCategoryBySlugMongo,
   getServiceCategoryMongo,
   getServiceByIdMongo,
+  getServiceBySlugMongo,
   getServicesByCategoryMongo,
   getServicesMongo,
   insertServiceCategoryMongo,
@@ -24,6 +25,7 @@ import {
   updateServiceMongo,
 } from "@/lib/services-db";
 import { normalizeService, type ServiceInput } from "@/lib/service-content";
+import { MAX_SERVICE_FAQS } from "@/lib/service-limits";
 
 const STORE_PATH = path.join(process.cwd(), "data", "admin-store.json");
 
@@ -45,6 +47,23 @@ export type ServiceSpecification = {
   detail: string;
 };
 
+export type ServiceApplication = {
+  id: string;
+  title: string;
+  iconUrl?: string;
+};
+
+export type ServiceDownload = {
+  id: string;
+  title: string;
+  fileUrl: string;
+};
+
+export type ServiceFaq = {
+  id: string;
+  question: string;
+};
+
 export type Service = {
   id: string;
   categoryId?: string;
@@ -56,6 +75,10 @@ export type Service = {
   overview: string;
   featureSections: ServiceFeatureSection[];
   specifications: ServiceSpecification[];
+  applications: ServiceApplication[];
+  downloads: ServiceDownload[];
+  faqsImageUrl?: string;
+  faqs: ServiceFaq[];
   advantageTitle: string;
   advantageContent: string;
   closingTitle: string;
@@ -150,6 +173,17 @@ export async function getServiceById(id: string): Promise<Service | null> {
   return service ? normalizeService(service) : null;
 }
 
+export async function getServiceBySlug(slug: string): Promise<Service | null> {
+  if (isMongoConfigured()) {
+    const service = await getServiceBySlugMongo(slug);
+    return service ? normalizeService(service) : null;
+  }
+
+  const store = await readStore();
+  const service = store.services.find((item) => item.slug === slug);
+  return service ? normalizeService(service) : null;
+}
+
 export async function getServiceCategoryBySlug(
   slug: string,
 ): Promise<ServiceCategory | null> {
@@ -158,7 +192,9 @@ export async function getServiceCategoryBySlug(
   }
 
   const store = await readStore();
-  return store.serviceCategories.find((category) => category.slug === slug) ?? null;
+  return (
+    store.serviceCategories.find((category) => category.slug === slug) ?? null
+  );
 }
 
 export async function getServicesByCategoryId(
@@ -222,7 +258,9 @@ export async function deleteServiceCategory(id: string): Promise<void> {
   store.serviceCategories = store.serviceCategories.filter(
     (category) => category.id !== id,
   );
-  store.services = store.services.filter((service) => service.categoryId !== id);
+  store.services = store.services.filter(
+    (service) => service.categoryId !== id,
+  );
   await writeStore(store);
 }
 
@@ -258,6 +296,9 @@ export async function createService(input: ServiceInput): Promise<Service> {
     overview: input.overview.trim(),
     featureSections: input.featureSections,
     specifications: input.specifications,
+    applications: [],
+    downloads: [],
+    faqs: [],
     advantageTitle: input.advantageTitle.trim(),
     advantageContent: input.advantageContent.trim(),
     closingTitle: input.closingTitle.trim(),
@@ -346,6 +387,238 @@ export async function deleteService(id: string): Promise<void> {
   const store = await readStore();
   store.services = store.services.filter((service) => service.id !== id);
   await writeStore(store);
+}
+
+export async function addServiceApplication(
+  serviceId: string,
+  input: { title: string; iconUrl?: string },
+): Promise<ServiceApplication | null> {
+  const existing = await getServiceById(serviceId);
+
+  if (!existing) {
+    return null;
+  }
+
+  const application: ServiceApplication = {
+    id: createId(),
+    title: input.title.trim(),
+    iconUrl: input.iconUrl?.trim() || undefined,
+  };
+
+  const service: Service = {
+    ...existing,
+    applications: [...existing.applications, application],
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (isMongoConfigured()) {
+    await updateServiceMongo(service);
+  }
+
+  const store = await readStore();
+  const index = store.services.findIndex((item) => item.id === serviceId);
+
+  if (index >= 0) {
+    store.services[index] = service;
+    await writeStore(store);
+  } else if (isMongoConfigured()) {
+    store.services.push(service);
+    await writeStore(store);
+  }
+
+  return application;
+}
+
+export async function deleteServiceApplication(
+  serviceId: string,
+  applicationId: string,
+): Promise<void> {
+  const existing = await getServiceById(serviceId);
+
+  if (!existing) {
+    return;
+  }
+
+  const service: Service = {
+    ...existing,
+    applications: existing.applications.filter(
+      (application) => application.id !== applicationId,
+    ),
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (isMongoConfigured()) {
+    await updateServiceMongo(service);
+  }
+
+  const store = await readStore();
+  const index = store.services.findIndex((item) => item.id === serviceId);
+
+  if (index >= 0) {
+    store.services[index] = service;
+    await writeStore(store);
+  }
+}
+
+export async function addServiceDownload(
+  serviceId: string,
+  input: { title: string; fileUrl: string },
+): Promise<ServiceDownload | null> {
+  const existing = await getServiceById(serviceId);
+
+  if (!existing) {
+    return null;
+  }
+
+  const download: ServiceDownload = {
+    id: createId(),
+    title: input.title.trim(),
+    fileUrl: input.fileUrl.trim(),
+  };
+
+  const service: Service = {
+    ...existing,
+    downloads: [...existing.downloads, download],
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (isMongoConfigured()) {
+    await updateServiceMongo(service);
+  }
+
+  const store = await readStore();
+  const index = store.services.findIndex((item) => item.id === serviceId);
+
+  if (index >= 0) {
+    store.services[index] = service;
+    await writeStore(store);
+  } else if (isMongoConfigured()) {
+    store.services.push(service);
+    await writeStore(store);
+  }
+
+  return download;
+}
+
+export async function deleteServiceDownload(
+  serviceId: string,
+  downloadId: string,
+): Promise<ServiceDownload | null> {
+  const existing = await getServiceById(serviceId);
+
+  if (!existing) {
+    return null;
+  }
+
+  const removed =
+    existing.downloads.find((download) => download.id === downloadId) ?? null;
+
+  const service: Service = {
+    ...existing,
+    downloads: existing.downloads.filter(
+      (download) => download.id !== downloadId,
+    ),
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (isMongoConfigured()) {
+    await updateServiceMongo(service);
+  }
+
+  const store = await readStore();
+  const index = store.services.findIndex((item) => item.id === serviceId);
+
+  if (index >= 0) {
+    store.services[index] = service;
+    await writeStore(store);
+  }
+
+  return removed;
+}
+
+async function persistService(service: Service): Promise<void> {
+  if (isMongoConfigured()) {
+    await updateServiceMongo(service);
+  }
+
+  const store = await readStore();
+  const index = store.services.findIndex((item) => item.id === service.id);
+
+  if (index >= 0) {
+    store.services[index] = service;
+    await writeStore(store);
+  } else if (isMongoConfigured()) {
+    store.services.push(service);
+    await writeStore(store);
+  }
+}
+
+export async function setServiceFaqsImage(
+  serviceId: string,
+  imageUrl: string | undefined,
+): Promise<Service | null> {
+  const existing = await getServiceById(serviceId);
+
+  if (!existing) {
+    return null;
+  }
+
+  const service: Service = {
+    ...existing,
+    faqsImageUrl: imageUrl?.trim() || undefined,
+    updatedAt: new Date().toISOString(),
+  };
+
+  await persistService(service);
+  return service;
+}
+
+export async function addServiceFaq(
+  serviceId: string,
+  question: string,
+): Promise<ServiceFaq | null> {
+  const existing = await getServiceById(serviceId);
+
+  if (!existing) {
+    return null;
+  }
+
+  if (existing.faqs.length >= MAX_SERVICE_FAQS) {
+    return null;
+  }
+
+  const faq: ServiceFaq = {
+    id: createId(),
+    question: question.trim(),
+  };
+
+  const service: Service = {
+    ...existing,
+    faqs: [...existing.faqs, faq],
+    updatedAt: new Date().toISOString(),
+  };
+
+  await persistService(service);
+  return faq;
+}
+
+export async function deleteServiceFaq(
+  serviceId: string,
+  faqId: string,
+): Promise<void> {
+  const existing = await getServiceById(serviceId);
+
+  if (!existing) {
+    return;
+  }
+
+  const service: Service = {
+    ...existing,
+    faqs: existing.faqs.filter((faq) => faq.id !== faqId),
+    updatedAt: new Date().toISOString(),
+  };
+
+  await persistService(service);
 }
 
 export async function createFormSubmission(input: {

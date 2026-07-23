@@ -2,15 +2,21 @@
 
 import { useState } from "react";
 
-const products = [
-  { name: "Hematology" },
-  { name: "Rapid Test Kits" },
-  { name: "Biochemistry" },
-  { name: "Reagents" },
-];
+export type ProductCategoryItem = {
+  id: string;
+  name: string;
+};
 
-export default function Products() {
+type ProductsProps = {
+  products: ProductCategoryItem[];
+};
+
+export default function Products({ products }: ProductsProps) {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+
+  if (products.length === 0) {
+    return null;
+  }
 
   return (
     <section className="products" id="services" aria-labelledby="products-title">
@@ -21,14 +27,14 @@ export default function Products() {
           {products.map((product) => (
             <button
               className={`product-card${
-                selectedProduct === product.name
+                selectedProduct === product.id
                   ? " product-card--featured"
                   : ""
               }`}
-              key={product.name}
+              key={product.id}
               type="button"
-              aria-pressed={selectedProduct === product.name}
-              onClick={() => setSelectedProduct(product.name)}
+              aria-pressed={selectedProduct === product.id}
+              onClick={() => setSelectedProduct(product.id)}
             >
               <h3>{product.name}</h3>
             </button>

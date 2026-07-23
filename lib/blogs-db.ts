@@ -36,6 +36,26 @@ export async function getBlogByIdMongo(id: string): Promise<BlogPost | null> {
   return blog;
 }
 
+export async function getBlogBySlugMongo(
+  slug: string,
+): Promise<BlogPost | null> {
+  if (!isMongoConfigured()) {
+    return null;
+  }
+
+  const db = await getMongoDb();
+  const document = await db
+    .collection<BlogDocument>(COLLECTION)
+    .findOne({ slug });
+
+  if (!document) {
+    return null;
+  }
+
+  const { _id, ...blog } = document;
+  return blog;
+}
+
 export async function insertBlogMongo(blog: BlogPost): Promise<void> {
   if (!isMongoConfigured()) {
     return;

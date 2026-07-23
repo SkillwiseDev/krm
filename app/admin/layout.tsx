@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import AdminSidebar from "@/app/admin/components/AdminSidebar";
+import AdminToaster from "@/app/admin/components/AdminToaster";
 import { isAdminAuthenticated } from "@/lib/admin-auth";
 
 export default async function AdminLayout({
@@ -16,6 +18,9 @@ export default async function AdminLayout({
     <div className="admin-shell">
       <AdminSidebar />
       <main className="admin-main">{children}</main>
+      <Suspense fallback={null}>
+        <AdminToaster />
+      </Suspense>
     </div>
   );
 }

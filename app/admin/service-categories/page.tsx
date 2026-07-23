@@ -38,9 +38,10 @@ export default async function ServiceCategoriesPage() {
       <header className="admin-section__header">
         <div>
           <p className="admin-section__eyebrow">Admin</p>
-          <h1>Service Category</h1>
+          <h1>Product Categories</h1>
           <p className="admin-section__description">
-            Create and manage service categories. Data is saved to MongoDB.
+            Create and manage product categories shown on the homepage under
+            &quot;Our Products&quot; (e.g. Hematology, Biochemistry).
           </p>
         </div>
       </header>
