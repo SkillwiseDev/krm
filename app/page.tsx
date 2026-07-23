@@ -8,21 +8,22 @@ import Problems from "@/components/Problems";
 import Products from "@/components/Products";
 import Resources from "@/components/Resources";
 import WhyChoose from "@/components/WhyChoose";
-import { getServiceCategories } from "@/lib/admin-store";
+import { getServices } from "@/lib/admin-store";
 import { getSiteCertifications } from "@/lib/site-certifications-store";
 import { getSiteResources } from "@/lib/site-resources-store";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const [categories, siteResources, siteCertifications] = await Promise.all([
-    getServiceCategories(),
+  const [services, siteResources, siteCertifications] = await Promise.all([
+    getServices(),
     getSiteResources(),
     getSiteCertifications(),
   ]);
-  const products = categories.map((category) => ({
-    id: category.id,
-    name: category.name,
+  const products = services.map((service) => ({
+    id: service.id,
+    title: service.title,
+    href: `/products/${service.slug}`,
   }));
 
   return (

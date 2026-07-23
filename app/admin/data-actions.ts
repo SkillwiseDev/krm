@@ -17,10 +17,13 @@ import {
   deleteServiceDownload,
   deleteServiceFaq,
   getServiceById,
+  getServiceCategoryById,
   markFormSubmissionRead,
   setServiceFaqsImage,
   updateService,
+  updateServiceCategory,
 } from "@/lib/admin-store";
+import { parseLandingSections } from "@/lib/category-landing-resolve";
 import {
   parseFeatureSections,
   parseSpecifications,
@@ -82,6 +85,96 @@ export async function removeServiceCategory(formData: FormData): Promise<void> {
   revalidatePath("/admin/services");
   revalidatePath("/");
   redirectWithToast("/admin/service-categories", "Category deleted.");
+}
+
+export async function uploadCategoryHeroImage(
+  formData: FormData,
+): Promise<AdminImageUploadResult> {
+  if (!(await isAdminAuthenticated())) {
+    return { error: "You must be signed in to upload images." };
+  }
+
+  const file = formData.get("file");
+  if (!(file instanceof File)) {
+    return { error: "Please choose an image file." };
+  }
+
+  return uploadAdminImage(file, "krm/categories/hero");
+}
+
+export async function saveServiceCategory(formData: FormData): Promise<void> {
+  await requireAdmin();
+
+  const id = formData.get("id");
+  const name = formData.get("name");
+  const description = formData.get("description");
+  const heroImageUrl = formData.get("heroImageUrl");
+  const landingTitle = formData.get("landingTitle");
+  const landingTagline = formData.get("landingTagline");
+  const landingSections = parseLandingSections(formData.get("landingSections"));
+
+  if (typeof id !== "string" || !id) {
+    redirectWithToast(
+      "/admin/service-categories",
+      "Category could not be updated.",
+      "error",
+    );
+  }
+
+  if (typeof name !== "string" || !name.trim()) {
+    redirectWithToast(
+      `/admin/service-categories/${id}`,
+      "Category name is required.",
+      "error",
+    );
+  }
+
+  const existing = await getServiceCategoryById(id);
+  if (!existing) {
+    redirectWithToast(
+      "/admin/service-categories",
+      "Category not found.",
+      "error",
+    );
+  }
+
+  const updated = await updateServiceCategory(id, {
+    name,
+    description: typeof description === "string" ? description : undefined,
+    heroImageUrl:
+      typeof heroImageUrl === "string" && heroImageUrl.trim()
+        ? heroImageUrl.trim()
+        : undefined,
+    landing: {
+      title:
+        typeof landingTitle === "string" && landingTitle.trim()
+          ? landingTitle.trim()
+          : name.trim(),
+      tagline:
+        typeof landingTagline === "string" ? landingTagline.trim() : "",
+      sections: landingSections,
+    },
+  });
+
+  if (!updated) {
+    redirectWithToast(
+      "/admin/service-categories",
+      "Category could not be updated.",
+      "error",
+    );
+  }
+
+  revalidatePath("/admin/service-categories");
+  revalidatePath(`/admin/service-categories/${id}`);
+  revalidatePath(`/categories/${updated.slug}`);
+  if (existing.slug !== updated.slug) {
+    revalidatePath(`/categories/${existing.slug}`);
+  }
+  revalidatePath("/");
+  redirectWithToast(
+    `/admin/service-categories/${id}`,
+    "Category landing updated.",
+  );
 }
 
 function parseServiceInput(formData: FormData): ServiceInput | null {

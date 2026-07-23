@@ -1,19 +1,16 @@
-"use client";
+import Link from "next/link";
 
-import { useState } from "react";
-
-export type ProductCategoryItem = {
+export type ProductItem = {
   id: string;
-  name: string;
+  title: string;
+  href: string;
 };
 
 type ProductsProps = {
-  products: ProductCategoryItem[];
+  products: ProductItem[];
 };
 
 export default function Products({ products }: ProductsProps) {
-  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
-
   if (products.length === 0) {
     return null;
   }
@@ -25,19 +22,9 @@ export default function Products({ products }: ProductsProps) {
 
         <div className="products__grid">
           {products.map((product) => (
-            <button
-              className={`product-card${
-                selectedProduct === product.id
-                  ? " product-card--featured"
-                  : ""
-              }`}
-              key={product.id}
-              type="button"
-              aria-pressed={selectedProduct === product.id}
-              onClick={() => setSelectedProduct(product.id)}
-            >
-              <h3>{product.name}</h3>
-            </button>
+            <Link className="product-card" key={product.id} href={product.href}>
+              <h3>{product.title}</h3>
+            </Link>
           ))}
         </div>
       </div>

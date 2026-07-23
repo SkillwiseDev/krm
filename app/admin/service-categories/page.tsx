@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import {
   addServiceCategory,
   removeServiceCategory,
@@ -41,7 +42,8 @@ export default async function ServiceCategoriesPage() {
           <h1>Product Categories</h1>
           <p className="admin-section__description">
             Create and manage product categories shown on the homepage under
-            &quot;Our Products&quot; (e.g. Hematology, Biochemistry).
+            &quot;Our Products&quot; (e.g. Hematology, Biochemistry). Edit opens
+            landing content and hero image settings.
           </p>
         </div>
       </header>
@@ -89,7 +91,13 @@ export default async function ServiceCategoriesPage() {
                       <td>{category.slug}</td>
                       <td>{serviceCountByCategory[category.id] ?? 0}</td>
                       <td>{category.description || "—"}</td>
-                      <td>
+                      <td className="admin-table__actions">
+                        <Link
+                          className="admin-button"
+                          href={`/admin/service-categories/${category.id}`}
+                        >
+                          Edit
+                        </Link>
                         <form action={removeServiceCategory}>
                           <input type="hidden" name="id" value={category.id} />
                           <button

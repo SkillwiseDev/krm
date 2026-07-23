@@ -22,19 +22,30 @@ import {
   getServicesMongo,
   insertServiceCategoryMongo,
   insertServiceMongo,
+  updateServiceCategoryMongo,
   updateServiceMongo,
 } from "@/lib/services-db";
+import type { CategoryLandingSection } from "@/lib/category-landing";
 import { normalizeService, type ServiceInput } from "@/lib/service-content";
 import { MAX_SERVICE_FAQS } from "@/lib/service-limits";
 
 const STORE_PATH = path.join(process.cwd(), "data", "admin-store.json");
+
+export type ServiceCategoryLanding = {
+  title: string;
+  tagline: string;
+  sections: CategoryLandingSection[];
+};
 
 export type ServiceCategory = {
   id: string;
   name: string;
   slug: string;
   description?: string;
+  heroImageUrl?: string;
+  landing?: ServiceCategoryLanding;
   createdAt: string;
+  updatedAt?: string;
 };
 
 export type ServiceFeatureSection = {
@@ -246,6 +257,86 @@ export async function createServiceCategory(input: {
   store.serviceCategories.push(category);
   await writeStore(store);
   return category;
+}
+
+export type ServiceCategoryInput = {
+  name: string;
+  description?: string;
+  heroImageUrl?: string;
+  landing?: ServiceCategoryLanding;
+};
+
+function normalizeCategoryLanding(
+  landing: ServiceCategoryLanding | undefined,
+): ServiceCategoryLanding | undefined {
+  if (!landing) {
+    return undefined;
+  }
+
+  const title = landing.title?.trim() || "";
+  const tagline = landing.tagline?.trim() || "";
+  const sections = Array.isArray(landing.sections) ? landing.sections : [];
+
+  if (!title && !tagline && sections.length === 0) {
+    return undefined;
+  }
+
+  return {
+    title: title || "Category",
+    tagline,
+    sections,
+  };
+}
+
+export async function updateServiceCategory(
+  id: string,
+  input: ServiceCategoryInput,
+): Promise<ServiceCategory | null> {
+  const existing = isMongoConfigured()
+    ? await getServiceCategoryMongo(id)
+    : (await readStore()).serviceCategories.find((item) => item.id === id) ??
+      null;
+
+  if (!existing) {
+    return null;
+  }
+
+  const name = input.name.trim();
+  const category: ServiceCategory = {
+    ...existing,
+    name,
+    slug: slugify(name),
+    description: input.description?.trim() || undefined,
+    heroImageUrl: input.heroImageUrl?.trim() || undefined,
+    landing: normalizeCategoryLanding(input.landing),
+    updatedAt: new Date().toISOString(),
+  };
+
+  if (isMongoConfigured()) {
+    await updateServiceCategoryMongo(category);
+  }
+
+  const store = await readStore();
+  const index = store.serviceCategories.findIndex((item) => item.id === id);
+  if (index >= 0) {
+    store.serviceCategories[index] = category;
+  } else {
+    store.serviceCategories.push(category);
+  }
+  await writeStore(store);
+
+  return category;
+}
+
+export async function getServiceCategoryById(
+  id: string,
+): Promise<ServiceCategory | null> {
+  if (isMongoConfigured()) {
+    return getServiceCategoryMongo(id);
+  }
+
+  const store = await readStore();
+  return store.serviceCategories.find((item) => item.id === id) ?? null;
 }
 
 export async function deleteServiceCategory(id: string): Promise<void> {

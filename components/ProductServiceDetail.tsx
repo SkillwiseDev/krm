@@ -27,7 +27,7 @@ export default function ProductServiceDetail({
   );
   const keyFeatures =
     featureTitles.length > 0
-      ? featureTitles.slice(0, 3)
+      ? featureTitles
       : benefitItems.slice(0, 3);
   const listedBenefits =
     featureTitles.length > 0
@@ -136,8 +136,8 @@ export default function ProductServiceDetail({
             <>
               <h2 id="features-title">Key Features</h2>
               <div className="product-features">
-                {keyFeatures.map((title) => (
-                  <div key={title}>{title}</div>
+                {keyFeatures.map((title, index) => (
+                  <div key={`feature-${index}`}>{title}</div>
                 ))}
               </div>
             </>

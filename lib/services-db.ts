@@ -136,6 +136,19 @@ export async function getServiceCategoryBySlugMongo(
   return category;
 }
 
+export async function updateServiceCategoryMongo(
+  category: ServiceCategory,
+): Promise<void> {
+  if (!isMongoConfigured()) {
+    return;
+  }
+
+  const db = await getMongoDb();
+  await db
+    .collection<ServiceCategoryDocument>(CATEGORIES_COLLECTION)
+    .replaceOne({ id: category.id }, category, { upsert: true });
+}
+
 export async function getServiceByIdMongo(id: string): Promise<Service | null> {
   if (!isMongoConfigured()) {
     return null;

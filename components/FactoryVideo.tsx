@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { contactFormLink } from "@/lib/contact-links";
 import videoPoster from "@/public/videosection.png";
 
 export default function FactoryVideo() {
@@ -27,16 +26,7 @@ export default function FactoryVideo() {
         <h2 id="factory-title">
           Built with Precision. Backed by <strong>Quality.</strong>
         </h2>
-        <Link
-          href={contactFormLink({
-            requirement: "Book Factory Visit",
-            sourcePage: "Home",
-            sourcePath: "/",
-            formName: "Factory Visit Booking",
-          })}
-        >
-          Visit Our Factory
-        </Link>
+        <Link href="/book">Visit Our Factory</Link>
       </div>
     </section>
   );
