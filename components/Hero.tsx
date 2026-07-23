@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import heroImage from "@/public/herosection.png";
 
 export default function Hero() {
@@ -24,9 +25,9 @@ export default function Hero() {
           KRM Healthcare manufactures high-quality laboratory equipment and
           reagents while providing complete pathology lab solutions.
         </p>
-        <a className="hero__cta" href="#contact">
+        <Link className="hero__cta" href="/book">
           Book now
-        </a>
+        </Link>
       </div>
     </section>
   );

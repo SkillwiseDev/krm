@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import logo from "@/public/logo.png";
 
 export default function Footer() {
@@ -6,9 +7,9 @@ export default function Footer() {
     <footer className="footer" id="contact">
       <div className="footer__content">
         <div className="footer__brand">
-          <a href="#home" aria-label="KRM Healthcare home">
+          <Link href="/" aria-label="KRM Healthcare home">
             <Image src={logo} alt="KRM Healthcare" />
-          </a>
+          </Link>
           <p>
             Global equipment quality, local value and complete laboratory
             solutions.
@@ -17,14 +18,14 @@ export default function Footer() {
 
         <nav className="footer__nav" aria-label="Footer navigation">
           <p>Explore</p>
-          <a href="#home">Home</a>
-          <a href="#services">Products</a>
+          <Link href="/">Home</Link>
+          <Link href="/services">Products</Link>
         </nav>
 
         <div className="footer__contact">
           <p>Contact Us</p>
           <span>Ready to build a better laboratory?</span>
-          <a href="#home">Book a consultation</a>
+          <Link href="/book">Book a consultation</Link>
         </div>
       </div>
 

@@ -16,7 +16,9 @@ export default async function AdminLayout({
 
   return (
     <div className="admin-shell">
-      <AdminSidebar />
+      <Suspense fallback={<aside className="admin-sidebar" aria-hidden="true" />}>
+        <AdminSidebar />
+      </Suspense>
       <main className="admin-main">{children}</main>
       <Suspense fallback={null}>
         <AdminToaster />

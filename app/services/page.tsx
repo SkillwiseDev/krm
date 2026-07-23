@@ -5,8 +5,10 @@ import FAQOptions from "@/components/FAQOptions";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ProductPortfolio from "@/components/ProductPortfolio";
+import TechnicalResourcesSection from "@/components/TechnicalResourcesSection";
 import { getServices } from "@/lib/admin-store";
 import { contactFormLink } from "@/lib/contact-links";
+import { getTechnicalResources } from "@/lib/technical-resources-store";
 import faqsImage from "@/public/faqs.png";
 import laboratoryServiceImage from "@/public/image6.png";
 import serviceImage from "@/public/service.png";
@@ -20,7 +22,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ServicesPage() {
-  const services = await getServices();
+  const [services, technicalResources] = await Promise.all([
+    getServices(),
+    getTechnicalResources(),
+  ]);
   const portfolioItems =
     services.length > 0
       ? services.map((service) => ({
@@ -101,35 +106,7 @@ export default async function ServicesPage() {
       >
         <h2 id="technical-resources-title">Technical Resources</h2>
 
-        <div className="technical-resources__links">
-          <Link
-            href={contactFormLink({
-              requirement: "Product Brochure",
-              sourcePage: "Services",
-              sourcePath: "/services",
-            })}
-          >
-            Product Brochure
-          </Link>
-          <Link
-            href={contactFormLink({
-              requirement: "Reagent Sheet",
-              sourcePage: "Services",
-              sourcePath: "/services",
-            })}
-          >
-            Reagent Sheet
-          </Link>
-          <Link
-            href={contactFormLink({
-              requirement: "Technical Specifications",
-              sourcePage: "Services",
-              sourcePath: "/services",
-            })}
-          >
-            Technical Specifications
-          </Link>
-        </div>
+        <TechnicalResourcesSection items={technicalResources.items} />
 
         <h3>FAQs</h3>
 

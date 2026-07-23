@@ -125,18 +125,27 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
         <div className="contact-methods">
           <div>
             <strong>Visit Us</strong>
-            <span>Factory / Office Address</span>
+            <span>Medical Device Park, Vikram Udyogpuri, Ujjain</span>
           </div>
           <div>
             <strong>Call Us</strong>
-            <span>Business Phone Number</span>
+            <a href="tel:+919039090548">90390 90548</a>
           </div>
           <div>
             <strong>Email Us</strong>
-            <span>Official Email Address</span>
+            <a href="mailto:customercare@krmhealthcare.in">
+              customercare@krmhealthcare.in
+            </a>
           </div>
           <div>
             <strong>WhatsApp Support</strong>
+            <a
+              href="https://wa.me/919039090548?text=Hi%20KRM%20Healthcare%2C%20I%20would%20like%20to%20know%20more."
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              90390 90548
+            </a>
           </div>
         </div>
       </section>

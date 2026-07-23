@@ -22,19 +22,45 @@ function formatDate(value: string): string {
   }).format(new Date(value));
 }
 
-export default async function FormSubmissionsPage() {
+type FormSubmissionsPageProps = {
+  searchParams: Promise<{
+    form?: string;
+  }>;
+};
+
+export default async function FormSubmissionsPage({
+  searchParams,
+}: FormSubmissionsPageProps) {
   await requireAdminPage();
-  const submissions = await getFormSubmissions();
+  const params = await searchParams;
+  const formFilter = params.form?.trim();
+  const allSubmissions = await getFormSubmissions();
+  const submissions = formFilter
+    ? allSubmissions.filter((item) => item.formName === formFilter)
+    : allSubmissions;
   const newCount = submissions.filter((item) => item.status === "new").length;
+  const isBookingsView = formFilter === "Booking";
+  const isResourceDownloadsView =
+    formFilter === "Technical Resource Download";
 
   return (
     <section className="admin-section">
       <header className="admin-section__header">
         <div>
           <p className="admin-section__eyebrow">Admin</p>
-          <h1>Form Submission</h1>
+          <h1>
+            {isBookingsView
+              ? "Bookings"
+              : isResourceDownloadsView
+                ? "Resource Downloads"
+                : "Form Submission"}
+          </h1>
           <p className="admin-section__description">
-            All form submissions from across the website appear here.
+            {isBookingsView
+              ? "All booking requests from the Book Now form appear here."
+              : isResourceDownloadsView
+                ? "Leads who requested a Technical Resource PDF download appear here."
+                : "All form submissions from across the website appear here."}
             {newCount > 0 ? ` ${newCount} new submission(s) waiting.` : ""}
           </p>
         </div>
@@ -42,7 +68,13 @@ export default async function FormSubmissionsPage() {
 
       <article className="admin-card admin-card--wide">
         {submissions.length === 0 ? (
-          <p className="admin-empty">No form submissions yet.</p>
+          <p className="admin-empty">
+            {isBookingsView
+              ? "No bookings yet."
+              : isResourceDownloadsView
+                ? "No resource download requests yet."
+                : "No form submissions yet."}
+          </p>
         ) : (
           <div className="admin-table-wrap">
             <table className="admin-table">
@@ -52,11 +84,12 @@ export default async function FormSubmissionsPage() {
                   <th>Form</th>
                   <th>Source</th>
                   <th>Name</th>
+                  <th>Organization</th>
                   <th>Email</th>
                   <th>Phone</th>
                   <th>Requirement</th>
                   <th>Message</th>
-                  <th>Extra</th>
+                  <th>Booking details</th>
                   <th>Submitted</th>
                   <th>Actions</th>
                 </tr>
@@ -79,6 +112,7 @@ export default async function FormSubmissionsPage() {
                       </span>
                     </td>
                     <td>{submission.firstName}</td>
+                    <td>{submission.organization || "—"}</td>
                     <td>{submission.email}</td>
                     <td>{submission.phone}</td>
                     <td>{submission.requirementType || "—"}</td>

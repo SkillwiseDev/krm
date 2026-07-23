@@ -99,6 +99,10 @@ export default function Header() {
           </span>
         </a>
 
+        <Link className="header-book-btn" href="/book">
+          Book Now
+        </Link>
+
         <details className="menu">
           <summary aria-label="Open navigation menu">
             <span />
@@ -111,6 +115,7 @@ export default function Header() {
                 {item.label}
               </Link>
             ))}
+            <Link href="/book">Book Now</Link>
           </nav>
         </details>
       </div>

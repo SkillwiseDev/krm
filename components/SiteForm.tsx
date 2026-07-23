@@ -50,7 +50,9 @@ export default function SiteForm({
           className="contact-form__message contact-form__message--success"
           role="status"
         >
-          Submitted successfully.
+          {formName === "Booking"
+            ? "Your booking request has been submitted successfully. We will contact you soon."
+            : "Submitted successfully."}
         </p>
       ) : null}
       <button type="submit" disabled={isPending}>
