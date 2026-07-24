@@ -55,12 +55,11 @@ function EmailIcon() {
 
 export default function Header({ categoryItems = [] }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
-  const navigationItems: NavItem[] = [
+  const topNavItems: NavItem[] = [
     { href: "/about", label: "About Us" },
     { href: "/services", label: "Services" },
-    ...categoryItems,
-    { href: "/contact", label: "Contact Us" },
   ];
+  const endNavItems: NavItem[] = [{ href: "/contact", label: "Contact Us" }];
 
   useEffect(() => {
     const updateHeader = () => setIsScrolled(window.scrollY > 24);
@@ -74,12 +73,44 @@ export default function Header({ categoryItems = [] }: HeaderProps) {
     <header
       className={`site-header${isScrolled ? " site-header--scrolled" : ""}`}
     >
-      <Link className="brand" href="/" aria-label="KRM Healthcare home">
-        <Image src={logo} alt="KRM Healthcare" priority />
+      <Link
+        className="brand"
+        href="/"
+        aria-label="KRM Healthcare home"
+        prefetch
+      >
+        <Image src={logo} alt="" priority />
+        <span className="brand__name">KRM Healthcare</span>
       </Link>
 
       <nav className="desktop-navigation" aria-label="Main navigation">
-        {navigationItems.map((item) => (
+        {topNavItems.map((item) => (
+          <Link key={item.href} href={item.href}>
+            {item.label}
+          </Link>
+        ))}
+
+        {categoryItems.length > 0 ? (
+          <div className="nav-dropdown">
+            <button
+              className="nav-dropdown__trigger"
+              type="button"
+              aria-haspopup="true"
+            >
+              Products
+              <span className="nav-dropdown__caret" aria-hidden="true" />
+            </button>
+            <div className="nav-dropdown__menu" role="menu">
+              {categoryItems.map((item) => (
+                <Link key={item.href} href={item.href} role="menuitem">
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {endNavItems.map((item) => (
           <Link key={item.href} href={item.href}>
             {item.label}
           </Link>
@@ -115,7 +146,24 @@ export default function Header({ categoryItems = [] }: HeaderProps) {
             <span />
           </summary>
           <nav aria-label="Mobile navigation">
-            {navigationItems.map((item) => (
+            {topNavItems.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
+
+            {categoryItems.length > 0 ? (
+              <div className="menu__group">
+                <p className="menu__group-label">Products</p>
+                {categoryItems.map((item) => (
+                  <Link key={item.href} href={item.href}>
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
+
+            {endNavItems.map((item) => (
               <Link key={item.href} href={item.href}>
                 {item.label}
               </Link>

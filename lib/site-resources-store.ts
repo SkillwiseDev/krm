@@ -47,7 +47,7 @@ export function getDefaultSiteResources(): SiteResources {
       {
         id: "default-faqs",
         title: "FAQs",
-        href: "/services",
+        href: "/faqs",
       },
       {
         id: "default-blogs",
@@ -70,12 +70,16 @@ export function normalizeSiteResources(
   const links = Array.isArray(value.links)
     ? value.links
         .filter((link) => link?.title?.trim())
-        .map((link) => ({
-          id: link.id || createId(),
-          title: link.title.trim(),
-          href: link.href?.trim() || "#",
-          fileUrl: link.fileUrl?.trim() || undefined,
-        }))
+        .map((link) => {
+          const title = link.title.trim();
+          const isFaqs = title.toLowerCase() === "faqs";
+          return {
+            id: link.id || createId(),
+            title,
+            href: isFaqs ? "/faqs" : link.href?.trim() || "#",
+            fileUrl: link.fileUrl?.trim() || undefined,
+          };
+        })
     : defaults.links;
 
   return {

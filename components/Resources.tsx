@@ -7,6 +7,13 @@ type ResourcesProps = {
   data: SiteResources;
 };
 
+function resourceHref(title: string, href?: string): string {
+  if (title.trim().toLowerCase() === "faqs") {
+    return "/faqs";
+  }
+  return href || "#";
+}
+
 export default function Resources({ data }: ResourcesProps) {
   return (
     <section className="resources" aria-labelledby="resources-title">
@@ -21,7 +28,9 @@ export default function Resources({ data }: ResourcesProps) {
                   {resource.title}
                 </a>
               ) : (
-                <Link href={resource.href || "#"}>{resource.title}</Link>
+                <Link href={resourceHref(resource.title, resource.href)}>
+                  {resource.title}
+                </Link>
               )}
             </li>
           ))}

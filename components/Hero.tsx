@@ -26,7 +26,7 @@ export default function Hero() {
           reagents while providing complete pathology lab solutions.
         </p>
         <Link className="hero__cta" href="/book">
-          Book now
+          Schedule an Appointment
         </Link>
       </div>
     </section>
