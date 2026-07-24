@@ -84,7 +84,7 @@ export default function FAQOptions({
   options,
   className = "",
 }: FAQOptionsProps) {
-  const faqItems =
+  const faqItems: FAQItem[] =
     items && items.length > 0
       ? items
       : options && options.length > 0
