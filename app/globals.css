@@ -444,19 +444,18 @@ a {
 .product-details-hero__image {
   position: absolute;
   z-index: -2;
-  top: -24%;
+  top: 8%;
   left: 50%;
-  width: min(68vw, 450px);
+  width: min(72vw, 420px);
   height: auto;
-  transform: translateX(-50%) scale(1.8);
-  filter: saturate(0.72);
+  transform: translateX(-50%);
 }
 
 .product-details-hero__wash {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: rgba(232, 243, 246, 0.57);
+  background: rgba(232, 243, 246, 0.28);
 }
 
 .product-details-hero__content {
@@ -1085,8 +1084,9 @@ a {
     background: linear-gradient(
       90deg,
       rgba(232, 243, 246, 0.98) 0%,
-      rgba(232, 243, 246, 0.9) 48%,
-      rgba(232, 243, 246, 0.56) 100%
+      rgba(232, 243, 246, 0.82) 42%,
+      rgba(232, 243, 246, 0.12) 72%,
+      rgba(232, 243, 246, 0) 100%
     );
   }
 
@@ -1744,13 +1744,14 @@ a {
 
   .product-portfolio {
     display: grid;
-    grid-template-columns: minmax(280px, 0.75fr) minmax(480px, 1.25fr);
+    grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
     grid-template-areas:
       "title title"
       "product card"
       "dots dots";
-    column-gap: clamp(54px, 7vw, 110px);
-    width: min(100%, 1280px);
+    column-gap: clamp(24px, 3vw, 40px);
+    align-items: center;
+    width: min(100%, 1100px);
     margin: 0 auto;
     padding: 88px 56px 68px;
   }
@@ -1767,14 +1768,16 @@ a {
   }
 
   .product-portfolio__image {
-    width: min(100%, 330px);
+    width: min(100%, 360px);
   }
 
   .portfolio-card {
     grid-area: card;
     align-self: center;
+    width: 100%;
+    max-width: none;
     min-height: 330px;
-    margin-top: 52px;
+    margin: 52px 0 0;
     padding: 48px clamp(38px, 4vw, 64px) 38px;
   }
 
@@ -2009,9 +2012,9 @@ a {
   }
 
   .product-details-hero__image {
-    top: -2%;
-    width: 58vw;
-    transform: translateX(-50%) scale(1.75);
+    top: 10%;
+    width: min(70vw, 360px);
+    transform: translateX(-50%);
   }
 
   .product-details-hero__content {
@@ -2835,9 +2838,15 @@ a {
   position: absolute;
 }
 
-/* Mobile homepage order: hero → factory → categories → rest */
+/* Homepage categories: above Our Products (all breakpoints) */
 .home-categories {
-  display: none;
+  display: block;
+  padding-top: 28px;
+  padding-bottom: 36px;
+}
+
+.home-categories .products__grid {
+  gap: 18px;
 }
 
 @media (max-width: 768px) {
@@ -2864,7 +2873,6 @@ a {
   }
 
   .home-page .home-categories {
-    display: block;
     order: 3;
     padding-top: 28px;
     padding-bottom: 36px;
@@ -2990,6 +2998,69 @@ a {
   line-height: 1.2;
   font-weight: 400;
   letter-spacing: -0.025em;
+}
+
+.product-card--media {
+  position: relative;
+  display: block;
+  width: min(100%, 280px);
+  min-height: 0;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+.product-card__media {
+  position: absolute;
+  inset: 12px;
+}
+
+.product-card__image {
+  object-fit: contain;
+  object-position: center;
+}
+
+.product-card__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 20px 16px;
+  color: #fff;
+  background: rgba(10, 52, 54, 0.72);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.product-card--media:hover .product-card__overlay,
+.product-card--media:focus-visible .product-card__overlay {
+  opacity: 1;
+}
+
+.product-card--media h3 {
+  font-size: clamp(15px, 1.8vw, 18px);
+  line-height: 1.25;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.product-card__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1;
 }
 
 .factory {
@@ -3290,6 +3361,10 @@ a {
 
   .product-card {
     width: min(100%, 260px);
+  }
+
+  .product-card--media {
+    width: min(100%, 300px);
   }
 
   .product-support {
@@ -3981,8 +4056,18 @@ a {
     padding: 15px;
   }
 
+  .product-card--media {
+    width: min(100%, 220px);
+    min-height: 0;
+    padding: 0;
+  }
+
   .product-card h3 {
     font-size: 18px;
+  }
+
+  .product-card--media h3 {
+    font-size: 15px;
   }
 
   .factory {
@@ -4352,6 +4437,10 @@ a {
 
   .product-card {
     width: min(100%, 220px);
+  }
+
+  .product-card--media {
+    width: min(100%, 260px);
   }
 
   .problems__grid {

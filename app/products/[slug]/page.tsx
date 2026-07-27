@@ -86,7 +86,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           src={analyzerImage}
           alt="3-part hematology analyzer"
           priority
-          sizes="100vw"
+          quality={90}
+          sizes="(min-width: 901px) 38vw, 72vw"
         />
         <div className="product-details-hero__wash" aria-hidden="true" />
         <div className="product-details-hero__content">

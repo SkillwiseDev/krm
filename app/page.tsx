@@ -27,6 +27,7 @@ export default async function Home() {
     id: service.id,
     title: service.title,
     href: `/products/${service.slug}`,
+    imageUrl: service.heroImageUrl,
   }));
   const categoryItems = categories.map((category) => ({
     id: category.id,

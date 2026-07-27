@@ -97,7 +97,7 @@ export default function Header({ categoryItems = [] }: HeaderProps) {
               type="button"
               aria-haspopup="true"
             >
-              Products
+              Category
               <span className="nav-dropdown__caret" aria-hidden="true" />
             </button>
             <div className="nav-dropdown__menu" role="menu">
@@ -154,7 +154,7 @@ export default function Header({ categoryItems = [] }: HeaderProps) {
 
             {categoryItems.length > 0 ? (
               <div className="menu__group">
-                <p className="menu__group-label">Products</p>
+                <p className="menu__group-label">Category</p>
                 {categoryItems.map((item) => (
                   <Link key={item.href} href={item.href}>
                     {item.label}

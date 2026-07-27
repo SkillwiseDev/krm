@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   title: "KRM Healthcare | Complete Laboratory Solutions",
   description:
     "High-quality laboratory equipment, reagents, and complete pathology lab solutions at local prices.",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

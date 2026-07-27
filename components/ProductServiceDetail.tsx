@@ -42,10 +42,11 @@ export default function ProductServiceDetail({
             className="product-details-hero__image"
             src={service.heroImageUrl}
             alt={service.title}
-            width={960}
-            height={640}
+            width={1200}
+            height={900}
             priority
-            sizes="100vw"
+            quality={90}
+            sizes="(min-width: 901px) 38vw, 72vw"
           />
         ) : (
           <Image
@@ -53,7 +54,8 @@ export default function ProductServiceDetail({
             src={analyzerImage}
             alt={service.title}
             priority
-            sizes="100vw"
+            quality={90}
+            sizes="(min-width: 901px) 38vw, 72vw"
           />
         )}
         <div className="product-details-hero__wash" aria-hidden="true" />
