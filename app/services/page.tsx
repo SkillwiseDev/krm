@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import FAQOptions from "@/components/FAQOptions";
+// import FAQOptions from "@/components/FAQOptions";
 import Footer from "@/components/Footer";
 import SiteHeader from "@/components/SiteHeader";
 import ProductPortfolio from "@/components/ProductPortfolio";
@@ -9,7 +9,7 @@ import TechnicalResourcesSection from "@/components/TechnicalResourcesSection";
 import { getServices } from "@/lib/admin-store";
 import { contactFormLink } from "@/lib/contact-links";
 import { getTechnicalResources } from "@/lib/technical-resources-store";
-import faqsImage from "@/public/faqs.png";
+// import faqsImage from "@/public/faqs.png";
 import laboratoryServiceImage from "@/public/image6.png";
 import serviceImage from "@/public/service.png";
 
@@ -108,6 +108,7 @@ export default async function ServicesPage() {
 
         <TechnicalResourcesSection items={technicalResources.items} />
 
+        {/*
         <h3>FAQs</h3>
 
         <div className="faqs-panel">
@@ -120,6 +121,7 @@ export default async function ServicesPage() {
 
           <FAQOptions />
         </div>
+        */}
 
         <Link
           className="demo-request"

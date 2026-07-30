@@ -745,6 +745,7 @@ export async function createFormSubmission(input: {
 
   if (isMongoConfigured()) {
     await insertFormSubmissionMongo(submission);
+    return submission;
   }
 
   const store = await readStore();
