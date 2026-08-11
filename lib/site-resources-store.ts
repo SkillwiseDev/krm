@@ -37,12 +37,12 @@ export function getDefaultSiteResources(): SiteResources {
       {
         id: "default-brochures",
         title: "Product Brochures",
-        href: "/services",
+        href: "/brochures",
       },
       {
         id: "default-certifications",
         title: "ISO & CE Certifications",
-        href: "/#certifications",
+        href: "/certifications",
       },
       {
         id: "default-faqs",
@@ -72,11 +72,24 @@ export function normalizeSiteResources(
         .filter((link) => link?.title?.trim())
         .map((link) => {
           const title = link.title.trim();
-          const isFaqs = title.toLowerCase() === "faqs";
+          const normalized = title.toLowerCase();
+          const isFaqs = normalized === "faqs";
+          const isCertifications =
+            normalized === "iso & ce certifications" ||
+            normalized.includes("certification");
+          const isBrochures =
+            normalized === "product brochures" ||
+            normalized.includes("brochure");
           return {
             id: link.id || createId(),
             title,
-            href: isFaqs ? "/faqs" : link.href?.trim() || "#",
+            href: isFaqs
+              ? "/faqs"
+              : isCertifications
+                ? "/certifications"
+                : isBrochures
+                  ? "/brochures"
+                  : link.href?.trim() || "#",
             fileUrl: link.fileUrl?.trim() || undefined,
           };
         })
@@ -168,6 +181,7 @@ export async function saveSiteResources(
 
   if (isMongoConfigured()) {
     await saveToMongo(resources);
+    return resources;
   }
 
   await writeToJson(resources);

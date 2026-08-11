@@ -30,6 +30,10 @@ const navItems = [
     label: "Resources & Downloads",
   },
   {
+    href: "/admin/brochures",
+    label: "Product Brochures",
+  },
+  {
     href: "/admin/technical-resources",
     label: "Technical Resources",
   },

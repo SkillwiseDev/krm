@@ -8,9 +8,26 @@ type ResourcesProps = {
 };
 
 function resourceHref(title: string, href?: string): string {
-  if (title.trim().toLowerCase() === "faqs") {
+  const normalized = title.trim().toLowerCase();
+
+  if (normalized === "faqs") {
     return "/faqs";
   }
+
+  if (
+    normalized === "iso & ce certifications" ||
+    normalized.includes("certification")
+  ) {
+    return "/certifications";
+  }
+
+  if (
+    normalized === "product brochures" ||
+    normalized.includes("brochure")
+  ) {
+    return "/brochures";
+  }
+
   return href || "#";
 }
 

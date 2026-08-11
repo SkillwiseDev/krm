@@ -189,6 +189,7 @@ export async function saveSiteCertifications(
 
   if (isMongoConfigured()) {
     await saveToMongo(certifications);
+    return certifications;
   }
 
   await writeToJson(certifications);

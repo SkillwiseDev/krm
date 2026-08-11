@@ -20,6 +20,10 @@ function slugifyFilename(value: string): string {
     .slice(0, 80);
 }
 
+/**
+ * Saves PDF files to `public/downloads` on the server (not Cloudinary).
+ * Served as `/downloads/<filename>`.
+ */
 export async function uploadAdminPdf(file: File): Promise<AdminPdfUploadResult> {
   if (!file.size) {
     return { error: "Please choose a PDF file." };
@@ -46,9 +50,17 @@ export async function uploadAdminPdf(file: File): Promise<AdminPdfUploadResult> 
 
     await fs.writeFile(filePath, buffer);
 
+    // Confirm the file is readable after write.
+    await fs.access(filePath);
+
     return { url: `/downloads/${filename}` };
-  } catch {
-    return { error: "PDF upload failed. Please try again." };
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Unknown filesystem error";
+    console.error("[uploadAdminPdf]", message);
+    return {
+      error: `PDF upload failed on server public/downloads. ${message}`,
+    };
   }
 }
 

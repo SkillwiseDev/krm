@@ -148,6 +148,7 @@ export async function saveTechnicalResources(
 
   if (isMongoConfigured()) {
     await saveToMongo(resources);
+    return resources;
   }
 
   await writeToJson(resources);

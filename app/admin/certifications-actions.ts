@@ -92,6 +92,7 @@ export async function saveHomeCertifications(
 
   await saveSiteCertifications(certifications);
   revalidatePath("/admin/certifications");
+  revalidatePath("/certifications");
   revalidatePath("/");
   redirectWithToast("/admin/certifications", "Certifications section updated.");
 }

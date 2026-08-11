@@ -2,7 +2,7 @@ import Certifications from "@/components/Certifications";
 import FactoryVideo from "@/components/FactoryVideo";
 import Footer from "@/components/Footer";
 import SiteHeader from "@/components/SiteHeader";
-import CustomerSuccess from "@/components/CustomerSuccess";
+// import CustomerSuccess from "@/components/CustomerSuccess";
 import Hero from "@/components/Hero";
 import HomeCategories from "@/components/HomeCategories";
 import Problems from "@/components/Problems";
@@ -45,7 +45,7 @@ export default async function Home() {
         <FactoryVideo />
         <Problems />
         <WhyChoose />
-        <CustomerSuccess />
+        {/* <CustomerSuccess /> */}
         <Certifications data={siteCertifications} />
       </div>
       <Resources data={siteResources} />

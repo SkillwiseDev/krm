@@ -12,7 +12,7 @@ type CertificationsProps = {
   data: SiteCertifications;
 };
 
-const FADE_INTERVAL_MS = 4000;
+const FADE_INTERVAL_MS = 4500;
 
 export default function Certifications({ data }: CertificationsProps) {
   const items =
@@ -28,7 +28,6 @@ export default function Certifications({ data }: CertificationsProps) {
         ] satisfies SiteCertificationItem[]);
 
   const [activeIndex, setActiveIndex] = useState(0);
-  const active = items[activeIndex] ?? items[0];
 
   useEffect(() => {
     if (items.length < 2) {
@@ -42,37 +41,6 @@ export default function Certifications({ data }: CertificationsProps) {
     return () => window.clearInterval(timer);
   }, [items.length]);
 
-  if (!active) {
-    return null;
-  }
-
-  const image = active.imageUrl ? (
-    <Image
-      key={`${active.id}-image`}
-      className="certifications__image"
-      src={active.imageUrl}
-      alt={active.cardTitle}
-      width={435}
-      height={520}
-      sizes="(max-width: 600px) 56vw, 435px"
-    />
-  ) : (
-    <Image
-      key={`${active.id}-fallback-image`}
-      className="certifications__image"
-      src={certificate}
-      alt="ISO 9001:2015 quality management system certificate"
-      sizes="(max-width: 600px) 56vw, 435px"
-    />
-  );
-
-  const card = (
-    <div className="certifications__card" key={`${active.id}-card`}>
-      <h3>{active.cardTitle}</h3>
-      <p>{active.cardDescription}</p>
-    </div>
-  );
-
   return (
     <section
       className="certifications"
@@ -82,22 +50,67 @@ export default function Certifications({ data }: CertificationsProps) {
       <h2 id="certifications-title">{data.title}</h2>
 
       <div className="certifications__showcase" aria-live="polite">
-        {active.fileUrl ? (
-          <a
-            className="certifications__download"
-            href={active.fileUrl}
-            download
-            aria-label={`Download ${active.cardTitle}`}
-          >
-            {image}
-            {card}
-          </a>
-        ) : (
-          <>
-            {image}
-            {card}
-          </>
-        )}
+        {items.map((item, index) => {
+          const isActive = index === activeIndex;
+          const image = item.imageUrl ? (
+            <Image
+              className="certifications__image"
+              src={item.imageUrl}
+              alt={item.cardTitle}
+              width={435}
+              height={520}
+              sizes="(max-width: 600px) 56vw, 435px"
+              priority={index === 0}
+            />
+          ) : (
+            <Image
+              className="certifications__image"
+              src={certificate}
+              alt="ISO 9001:2015 quality management system certificate"
+              sizes="(max-width: 600px) 56vw, 435px"
+              priority={index === 0}
+            />
+          );
+
+          const card = (
+            <div className="certifications__card">
+              <h3>{item.cardTitle}</h3>
+              <p>{item.cardDescription}</p>
+            </div>
+          );
+
+          const slideClassName = `certifications__slide${
+            isActive ? " certifications__slide--active" : ""
+          }`;
+
+          if (item.fileUrl) {
+            return (
+              <a
+                key={item.id}
+                className={`certifications__download ${slideClassName}`}
+                href={item.fileUrl}
+                download
+                aria-label={`Download ${item.cardTitle}`}
+                aria-hidden={!isActive}
+                tabIndex={isActive ? 0 : -1}
+              >
+                {image}
+                {card}
+              </a>
+            );
+          }
+
+          return (
+            <div
+              key={item.id}
+              className={slideClassName}
+              aria-hidden={!isActive}
+            >
+              {image}
+              {card}
+            </div>
+          );
+        })}
       </div>
 
       {items.length > 1 ? (
