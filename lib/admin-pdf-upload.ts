@@ -1,6 +1,11 @@
 import fs from "fs/promises";
 import path from "path";
 import crypto from "crypto";
+import { isMongoConfigured } from "@/lib/mongodb";
+import {
+  deletePdfFromGridFS,
+  savePdfToGridFS,
+} from "@/lib/pdf-storage";
 
 export type AdminPdfUploadResult = {
   url?: string;
@@ -20,9 +25,22 @@ function slugifyFilename(value: string): string {
     .slice(0, 80);
 }
 
+function filenameFromUrl(fileUrl: string): string | null {
+  if (!fileUrl.startsWith("/downloads/")) {
+    return null;
+  }
+
+  const filename = path.basename(fileUrl);
+  if (!filename || filename.includes("..")) {
+    return null;
+  }
+
+  return filename;
+}
+
 /**
- * Saves PDF files to `public/downloads` on the server (not Cloudinary).
- * Served as `/downloads/<filename>`.
+ * Saves PDFs to MongoDB (production-safe) and serves them from `/downloads/<filename>`.
+ * Local fallback writes to `public/downloads` when Mongo is not configured.
  */
 export async function uploadAdminPdf(file: File): Promise<AdminPdfUploadResult> {
   if (!file.size) {
@@ -40,26 +58,28 @@ export async function uploadAdminPdf(file: File): Promise<AdminPdfUploadResult> 
     return { error: "PDF must be 20MB or smaller." };
   }
 
+  const baseName = slugifyFilename(file.name) || "document";
+  const filename = `${baseName}-${crypto.randomUUID().slice(0, 8)}.pdf`;
+  const buffer = Buffer.from(await file.arrayBuffer());
+
   try {
+    if (isMongoConfigured()) {
+      await savePdfToGridFS(filename, buffer);
+      return { url: `/downloads/${filename}` };
+    }
+
     await fs.mkdir(DOWNLOADS_DIR, { recursive: true });
-
-    const baseName = slugifyFilename(file.name) || "document";
-    const filename = `${baseName}-${crypto.randomUUID().slice(0, 8)}.pdf`;
     const filePath = path.join(DOWNLOADS_DIR, filename);
-    const buffer = Buffer.from(await file.arrayBuffer());
-
     await fs.writeFile(filePath, buffer);
-
-    // Confirm the file is readable after write.
     await fs.access(filePath);
 
     return { url: `/downloads/${filename}` };
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "Unknown filesystem error";
+      error instanceof Error ? error.message : "Unknown upload error";
     console.error("[uploadAdminPdf]", message);
     return {
-      error: `PDF upload failed on server public/downloads. ${message}`,
+      error: `PDF upload failed. ${message}`,
     };
   }
 }
@@ -67,14 +87,12 @@ export async function uploadAdminPdf(file: File): Promise<AdminPdfUploadResult> 
 export async function deletePublicDownloadFile(
   fileUrl: string | undefined,
 ): Promise<void> {
-  if (!fileUrl?.startsWith("/downloads/")) {
+  const filename = fileUrl ? filenameFromUrl(fileUrl) : null;
+  if (!filename) {
     return;
   }
 
-  const filename = path.basename(fileUrl);
-  if (!filename || filename.includes("..")) {
-    return;
-  }
+  await deletePdfFromGridFS(filename);
 
   try {
     await fs.unlink(path.join(DOWNLOADS_DIR, filename));

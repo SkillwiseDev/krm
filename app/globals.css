@@ -3122,6 +3122,18 @@ a {
   object-fit: cover;
 }
 
+.factory__media--playing::after {
+  display: none;
+}
+
+.factory__embed {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 .factory__play {
   position: absolute;
   z-index: 2;
@@ -6724,7 +6736,7 @@ a {
 }
 
 .certifications-page__list {
-  width: min(100%, 1080px);
+  width: min(100%, 1180px);
   margin: 0 auto;
   padding: 28px 28px 88px;
 }
@@ -6738,7 +6750,7 @@ a {
 
 .certifications-page__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
   margin: 0;
   padding: 0;
@@ -6746,10 +6758,11 @@ a {
 }
 
 .certifications-page__card {
-  display: grid;
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  padding: 18px;
+  overflow: hidden;
+  padding: 14px;
   border-radius: 20px;
   color: inherit;
   background: #f8fbfb;
@@ -6768,30 +6781,29 @@ a.certifications-page__card:focus-visible {
 }
 
 .certifications-page__media {
-  display: grid;
-  place-items: center;
-  min-height: 240px;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   border-radius: 14px;
   background: #fff;
 }
 
 .certifications-page__image {
-  width: 100%;
-  height: auto;
-  max-height: 320px;
   object-fit: contain;
+  object-position: center;
 }
 
 .certifications-page__body {
   display: grid;
-  gap: 10px;
+  gap: 8px;
+  padding: 14px 6px 6px;
 }
 
 .certifications-page__body h2 {
   margin: 0;
-  font-size: clamp(20px, 2.4vw, 26px);
-  line-height: 1.2;
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.25;
   font-weight: 600;
   letter-spacing: -0.03em;
 }
@@ -6799,8 +6811,8 @@ a.certifications-page__card:focus-visible {
 .certifications-page__body p {
   margin: 0;
   color: #475569;
-  font-size: 15px;
-  line-height: 1.45;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 .certifications-page__cta {
@@ -6809,8 +6821,14 @@ a.certifications-page__card:focus-visible {
   gap: 6px;
   margin-top: 4px;
   color: #0b8588;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .certifications-page__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 600px) {
@@ -6820,6 +6838,10 @@ a.certifications-page__card:focus-visible {
 
   .certifications-page__list {
     padding: 16px 16px 64px;
+  }
+
+  .certifications-page__grid {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -6879,14 +6901,19 @@ a.certifications-page__card:focus-visible {
 
 .brochures-page__card {
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   padding: 20px 22px;
+  border: 0;
   border-radius: 16px;
   color: inherit;
   background: #eaf6f6;
+  font: inherit;
+  text-align: left;
   text-decoration: none;
+  cursor: pointer;
   transition:
     transform 160ms ease,
     box-shadow 160ms ease,
@@ -6894,7 +6921,9 @@ a.certifications-page__card:focus-visible {
 }
 
 a.brochures-page__card:hover,
-a.brochures-page__card:focus-visible {
+a.brochures-page__card:focus-visible,
+button.brochures-page__card:hover,
+button.brochures-page__card:focus-visible {
   background: #dff1f1;
   box-shadow: 0 8px 20px rgba(17, 151, 154, 0.12);
   outline: none;

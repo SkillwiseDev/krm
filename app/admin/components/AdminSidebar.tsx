@@ -54,6 +54,10 @@ const navItems = [
     label: "Resource Downloads",
   },
   {
+    href: "/admin/form-submissions?form=Brochure%20Download",
+    label: "Brochure Downloads",
+  },
+  {
     href: "/admin/blogs",
     label: "Blogs",
   },

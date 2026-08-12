@@ -42,6 +42,7 @@ export default async function FormSubmissionsPage({
   const isBookingsView = formFilter === "Booking";
   const isResourceDownloadsView =
     formFilter === "Technical Resource Download";
+  const isBrochureDownloadsView = formFilter === "Brochure Download";
 
   return (
     <section className="admin-section">
@@ -53,14 +54,18 @@ export default async function FormSubmissionsPage({
               ? "Bookings"
               : isResourceDownloadsView
                 ? "Resource Downloads"
-                : "Form Submission"}
+                : isBrochureDownloadsView
+                  ? "Brochure Downloads"
+                  : "Form Submission"}
           </h1>
           <p className="admin-section__description">
             {isBookingsView
               ? "All booking requests from the Book Now form appear here."
               : isResourceDownloadsView
                 ? "Leads who requested a Technical Resource PDF download appear here."
-                : "All form submissions from across the website appear here."}
+                : isBrochureDownloadsView
+                  ? "Leads who requested a Product Brochure PDF download appear here."
+                  : "All form submissions from across the website appear here."}
             {newCount > 0 ? ` ${newCount} new submission(s) waiting.` : ""}
           </p>
         </div>
@@ -73,7 +78,9 @@ export default async function FormSubmissionsPage({
               ? "No bookings yet."
               : isResourceDownloadsView
                 ? "No resource download requests yet."
-                : "No form submissions yet."}
+                : isBrochureDownloadsView
+                  ? "No brochure download requests yet."
+                  : "No form submissions yet."}
           </p>
         ) : (
           <div className="admin-table-wrap">

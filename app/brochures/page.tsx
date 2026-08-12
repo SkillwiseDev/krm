@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import BrochureDownloadsList from "@/components/BrochureDownloadsList";
 import Footer from "@/components/Footer";
 import SiteHeader from "@/components/SiteHeader";
 import { getProductBrochures } from "@/lib/product-brochures-store";
@@ -35,32 +36,7 @@ export default async function BrochuresPage() {
             No brochures available yet. Check back soon.
           </p>
         ) : (
-          <ul className="brochures-page__grid">
-            {data.items.map((item) => (
-              <li key={item.id}>
-                {item.fileUrl ? (
-                  <a
-                    className="brochures-page__card"
-                    href={item.fileUrl}
-                    download
-                    aria-label={`Download ${item.title}`}
-                  >
-                    <h2>{item.title}</h2>
-                    <span className="brochures-page__cta">
-                      Download PDF <span aria-hidden="true">→</span>
-                    </span>
-                  </a>
-                ) : (
-                  <article className="brochures-page__card">
-                    <h2>{item.title}</h2>
-                    <span className="brochures-page__cta brochures-page__cta--muted">
-                      PDF coming soon
-                    </span>
-                  </article>
-                )}
-              </li>
-            ))}
-          </ul>
+          <BrochureDownloadsList items={data.items} />
         )}
       </section>
 

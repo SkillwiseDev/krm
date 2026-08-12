@@ -50,16 +50,16 @@ export default async function CertificationsPage() {
                         className="certifications-page__image"
                         src={item.imageUrl}
                         alt={item.cardTitle}
-                        width={420}
-                        height={500}
-                        sizes="(max-width: 700px) 80vw, 320px"
+                        fill
+                        sizes="(max-width: 700px) 90vw, (max-width: 1024px) 45vw, 320px"
                       />
                     ) : (
                       <Image
                         className="certifications-page__image"
                         src={certificate}
                         alt={item.cardTitle}
-                        sizes="(max-width: 700px) 80vw, 320px"
+                        fill
+                        sizes="(max-width: 700px) 90vw, (max-width: 1024px) 45vw, 320px"
                       />
                     )}
                   </div>
