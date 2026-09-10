@@ -22,8 +22,18 @@ export default function Hero() {
           Complete Laboratory Solutions.
         </h1>
         <p>
-          KRM Healthcare manufactures high-quality laboratory equipment and
-          reagents while providing complete pathology lab solutions.
+          We are on a mission to deliver reliable, affordable, and accessible
+          in-vitro diagnostic solutions that empower healthcare providers across
+          India to diagnose faster and treat better.
+          <br />
+          <br />
+          <strong>Vision:</strong> To be India's most trusted diagnostics
+          partner, expanding quality healthcare access to every corner of the
+          country.
+          <br />
+          <br />
+          <strong>Our Core Values:</strong> Quality, Integrity, Innovation,
+          Customer-Centricity.
         </p>
         <Link className="hero__cta" href="/book">
           Schedule an Appointment
