@@ -6966,3 +6966,17 @@ button.brochures-page__card:focus-visible {
     gap: 10px;
   }
 }
+.hero__content p {
+  margin: 8px 0;
+}
+
+.hero__content ol {
+  margin: 0 0 4px 0;
+  padding-left: 20px;
+}
+
+.hero__content li {
+  margin: 0 0 2px 0;
+
+  font-size: 20px;
+}

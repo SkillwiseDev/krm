@@ -14,27 +14,36 @@ export default function Hero() {
         sizes="100vw"
       />
       <div className="hero__wash" aria-hidden="true" />
-
       <div className="hero__content" id="home">
         <h1 id="hero-title">
           Global Equipment Quality. Local Prices.
           <br />
           Complete Laboratory Solutions.
         </h1>
+
         <p>
-          We are on a mission to deliver reliable, affordable, and accessible
-          in-vitro diagnostic solutions that empower healthcare providers across
-          India to diagnose faster and treat better.
-          <br />
-          <br />
+          <strong>Mission:</strong> To deliver reliable, affordable, and
+          accessible in-vitro diagnostic solutions that empower healthcare
+          providers across India to diagnose faster and treat better.
+        </p>
+
+        <p>
           <strong>Vision:</strong> To be India's most trusted diagnostics
           partner, expanding quality healthcare access to every corner of the
           country.
-          <br />
-          <br />
-          <strong>Our Core Values:</strong> Quality, Integrity, Innovation,
-          Customer-Centricity.
         </p>
+
+        <p>
+          <strong>Our Core Values:</strong>
+        </p>
+
+        <ol style={{ listStyleType: "decimal", paddingLeft: "20px" }}>
+          <li>Quality</li>
+          <li>Integrity</li>
+          <li>Innovation</li>
+          <li>Customer-Centricity</li>
+        </ol>
+
         <Link className="hero__cta" href="/book">
           Schedule an Appointment
         </Link>
